@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyBooks</string>
+    <string name="desc_add_new_book">Add new book</string>
 </resources>
