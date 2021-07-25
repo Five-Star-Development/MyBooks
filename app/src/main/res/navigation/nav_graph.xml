@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="dev.five_star.mybooks.MainFragment"
+        android:name="dev.five_star.mybooks.View.MainFragment"
         android:label="MainFragment" />
 </navigation>
