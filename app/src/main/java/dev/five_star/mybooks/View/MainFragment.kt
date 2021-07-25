@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.Model.Dummy
+import dev.five_star.mybooks.R
 import dev.five_star.mybooks.databinding.FragmentMainBinding
 import dev.five_star.mybooks.databinding.ItemBookCardBinding
 import java.math.RoundingMode
@@ -37,6 +39,10 @@ class MainFragment : Fragment() {
         binding.bookList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = BookAdapter(Dummy.bookList)
+        }
+
+        binding.addBook.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_addBookDialog)
         }
     }
 

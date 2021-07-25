@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="dev.five_star.mybooks.View.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_addBookDialog"
+            app:destination="@id/addBookDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/addBookDialog"
+        android:name="dev.five_star.mybooks.View.AddBookDialog"
+        android:label="AddBookDialog" />
 </navigation>

@@ -3,7 +3,7 @@ package dev.five_star.mybooks.Model
 class Dummy {
 
     companion object {
-        val bookList = listOf(
+        val bookList = mutableListOf(
             Book("Book Number 1", 300, 3),
             Book("Book Number 2", 300, 30),
             Book("Book Number 3", 300, 233),
