@@ -1,9 +1,12 @@
 package dev.five_star.mybooks.View
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,7 @@ import java.text.DecimalFormat
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -45,10 +49,21 @@ class DetailsFragment : Fragment() {
         binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
         binding.itemBook.bookProgressBar.progress = percent.toInt()
 
-
         binding.pagesList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = PagesAdapter(Dummy.pageList)
+        }
+
+        binding.pagesEntry.setOnKeyListener { view, keyCode, keyEvent ->
+            (view as TextView)
+            if (keyEvent.action == KeyEvent.ACTION_DOWN &&
+                    keyCode == KeyEvent.KEYCODE_ENTER) {
+                Dummy.pageList.add(
+                    PagesEntry("today", view.text.toString())
+                )
+                view.text = null
+            }
+            return@setOnKeyListener false
         }
     }
 
@@ -69,14 +84,17 @@ class DetailsFragment : Fragment() {
     }
 }
 
-class PagesAdapter(private val pagesList: List<PagesEntry>) : RecyclerView.Adapter<PagesAdapter.ViewHolder>() {
+class PagesAdapter(private val pagesList: List<PagesEntry>) :
+    RecyclerView.Adapter<PagesAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: ItemBookPageBinding) : RecyclerView.ViewHolder(binding.root)  {
+    inner class ViewHolder(val binding: ItemBookPageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemBookPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemBookPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
