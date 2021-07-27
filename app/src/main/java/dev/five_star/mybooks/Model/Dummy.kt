@@ -12,6 +12,14 @@ class Dummy {
             Book("Book Number 6", 300, 300),
             Book("Book Number 7", 300, 100),
         )
+
+        val pageList = mutableListOf(
+            PagesEntry("13.03.2021", "13"),
+            PagesEntry("14.03.2021", "35"),
+            PagesEntry("15.03.2021", "67"),
+            PagesEntry("16.03.2021", "89"),
+            PagesEntry("17.03.2021", "111"),
+        )
     }
 
 }

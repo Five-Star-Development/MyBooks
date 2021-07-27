@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +39,9 @@ class MainFragment : Fragment() {
 
         binding.bookList.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = BookAdapter(Dummy.bookList)
+            adapter = BookAdapter(Dummy.bookList) {
+                findNavController().navigate(R.id.action_mainFragment_to_detailsFragment)
+            }
         }
 
         binding.addBook.setOnClickListener {
@@ -53,7 +56,7 @@ class MainFragment : Fragment() {
 
 }
 
-class BookAdapter(private val books: List<Book>) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class BookAdapter(private val books: List<Book>, val itemClick: (book: Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemBookCardBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -70,6 +73,9 @@ class BookAdapter(private val books: List<Book>) : RecyclerView.Adapter<BookAdap
                 val percent = this.currentPage.divideToPercent(this.pages)
                 binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
                 binding.itemBook.bookProgressBar.progress = percent.toInt()
+                binding.itemBook.itemBookLayout.setOnClickListener {
+                    itemClick(this)
+                }
             }
         }
     }
