@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.Model.Dummy
 import dev.five_star.mybooks.Model.PagesEntry
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class DetailsFragment : Fragment() {
 
@@ -18,6 +22,9 @@ class DetailsFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val args: DetailsFragmentArgs by navArgs()
+    private lateinit var book: Book
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +38,12 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.itemBook.bookTitle.text = "Dummy Book"
-        binding.itemBook.bookPercentText.text = "34%"
-        binding.itemBook.bookProgressBar.progress = 34
+        book = args.book
+
+        binding.itemBook.bookTitle.text = book.title
+        val percent = book.currentPage.divideToPercent(book.pages)
+        binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
+        binding.itemBook.bookProgressBar.progress = percent.toInt()
 
 
         binding.pagesList.apply {
@@ -45,6 +55,17 @@ class DetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun Int.divideToPercent(divideTo: Int): Float {
+        return if (divideTo == 0) 0f
+        else (this / divideTo.toFloat()) * 100
+    }
+
+    private fun roundOffDecimal(number: Float): Float {
+        val df = DecimalFormat("#.#")
+        df.roundingMode = RoundingMode.HALF_UP
+        return df.format(number).toFloat()
     }
 }
 

@@ -40,7 +40,8 @@ class MainFragment : Fragment() {
         binding.bookList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = BookAdapter(Dummy.bookList) {
-                findNavController().navigate(R.id.action_mainFragment_to_detailsFragment)
+                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(it)
+                findNavController().navigate(action)
             }
         }
 
@@ -87,7 +88,7 @@ class BookAdapter(private val books: List<Book>, val itemClick: (book: Book) -> 
         else (this / divideTo.toFloat()) * 100
     }
 
-    private fun roundOffDecimal(number: Float): Float? {
+    private fun roundOffDecimal(number: Float): Float {
         val df = DecimalFormat("#.#")
         df.roundingMode = RoundingMode.HALF_UP
         return df.format(number).toFloat()

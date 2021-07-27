@@ -22,5 +22,9 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="dev.five_star.mybooks.View.DetailsFragment"
-        android:label="DetailsFragment" />
+        android:label="DetailsFragment" >
+        <argument
+            android:name="book"
+            app:argType="dev.five_star.mybooks.Model.Book" />
+    </fragment>
 </navigation>
