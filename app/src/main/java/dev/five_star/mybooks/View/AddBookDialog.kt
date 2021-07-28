@@ -12,7 +12,6 @@ import dev.five_star.mybooks.databinding.DialogNewBookBinding
 class AddBookDialog : DialogFragment() {
 
     private var _binding: DialogNewBookBinding? = null
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!

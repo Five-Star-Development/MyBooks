@@ -5,7 +5,6 @@
     <string name="pages_of_the_book">Pages of the Book</string>
     <string name="add_book">Add Book</string>
     <string name="page">Page</string>
-    <string name="finished_page">Page you finished today</string>
     <string name="enter">Enter</string>
     <string name="todays_page">Today\'s page:</string>
 </resources>

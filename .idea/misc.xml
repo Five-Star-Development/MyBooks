@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_book.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_book_card.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_book_page.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_book_page.xml" value="0.1" />
       </map>
     </option>
   </component>

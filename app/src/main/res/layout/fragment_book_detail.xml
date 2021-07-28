@@ -37,7 +37,7 @@
         android:id="@+id/pages_entry"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:hint="page"
+        android:hint="@string/page"
         android:inputType="number"
         android:gravity="center"
         android:layout_marginStart="32dp"
