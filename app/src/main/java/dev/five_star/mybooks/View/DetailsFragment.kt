@@ -6,18 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.Model.Dummy
 import dev.five_star.mybooks.Model.PagesEntry
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import dev.five_star.mybooks.divideToPercent
+import dev.five_star.mybooks.roundOffDecimal
 
 class DetailsFragment : Fragment() {
 
@@ -27,8 +28,10 @@ class DetailsFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val pagesEntryAdapter = PagesAdapter()
     private val args: DetailsFragmentArgs by navArgs()
     private lateinit var book: Book
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,17 +54,22 @@ class DetailsFragment : Fragment() {
 
         binding.pagesList.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = PagesAdapter(Dummy.pageList)
+            adapter = pagesEntryAdapter
+            pagesEntryAdapter.submitList(Dummy.pageList)
         }
 
         binding.pagesEntry.setOnKeyListener { view, keyCode, keyEvent ->
-            (view as TextView)
+            if (view !is TextView) {
+                return@setOnKeyListener false
+            }
             if (keyEvent.action == KeyEvent.ACTION_DOWN &&
-                    keyCode == KeyEvent.KEYCODE_ENTER) {
+                keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
                 Dummy.pageList.add(
                     PagesEntry("today", view.text.toString())
                 )
                 view.text = null
+                return@setOnKeyListener true
             }
             return@setOnKeyListener false
         }
@@ -72,24 +80,26 @@ class DetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun Int.divideToPercent(divideTo: Int): Float {
-        return if (divideTo == 0) 0f
-        else (this / divideTo.toFloat()) * 100
+}
+
+private object PagesDiffUtil : DiffUtil.ItemCallback<PagesEntry>() {
+    override fun areItemsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
+        return oldItem == newItem //TODO compare the id as soon as we have a database
     }
 
-    private fun roundOffDecimal(number: Float): Float {
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.HALF_UP
-        return df.format(number).toFloat()
+    override fun areContentsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
+        return (oldItem == newItem)
     }
 }
 
-class PagesAdapter(private val pagesList: List<PagesEntry>) :
-    RecyclerView.Adapter<PagesAdapter.ViewHolder>() {
+class PagesAdapter : ListAdapter<PagesEntry, PagesAdapter.ViewHolder>(PagesDiffUtil) {
 
-    inner class ViewHolder(val binding: ItemBookPageBinding) :
+    inner class ViewHolder(private val binding: ItemBookPageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
+        fun bindPagesEntry(entry: PagesEntry) {
+            binding.enteredDate.text = entry.date
+            binding.page.text = entry.page
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -99,14 +109,8 @@ class PagesAdapter(private val pagesList: List<PagesEntry>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(holder) {
-            with(pagesList[position]) {
-                binding.enteredDate.text = this.date
-                binding.page.text = this.page
-            }
-        }
+        val pagesEntry = getItem(position)
+        holder.bindPagesEntry(pagesEntry)
     }
-
-    override fun getItemCount() = pagesList.size
 
 }

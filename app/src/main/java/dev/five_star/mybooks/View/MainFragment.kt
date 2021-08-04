@@ -8,13 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.Model.Dummy
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.databinding.FragmentMainBinding
 import dev.five_star.mybooks.databinding.ItemBookCardBinding
+import dev.five_star.mybooks.divideToPercent
+import dev.five_star.mybooks.roundOffDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -24,6 +28,11 @@ class MainFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val bookAdapter = BookAdapter() {
+        val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(it)
+        findNavController().navigate(action)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,10 +48,8 @@ class MainFragment : Fragment() {
 
         binding.bookList.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = BookAdapter(Dummy.bookList) {
-                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(it)
-                findNavController().navigate(action)
-            }
+            adapter = bookAdapter
+            bookAdapter.submitList(Dummy.bookList)
         }
 
         binding.addBook.setOnClickListener {
@@ -57,41 +64,42 @@ class MainFragment : Fragment() {
 
 }
 
-class BookAdapter(private val books: List<Book>, val itemClick: (book: Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+private object BookDiffUtil : DiffUtil.ItemCallback<Book>() {
+    override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+        return oldItem == newItem //TODO compare the id as soon as we have a database
+    }
 
-    inner class ViewHolder(val binding: ItemBookCardBinding) : RecyclerView.ViewHolder(binding.root)
+    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
+        return (oldItem == newItem)
+    }
+}
+
+class BookAdapter(val itemClick: (book: Book) -> Unit) :
+    ListAdapter<Book, BookAdapter.ViewHolder>(BookDiffUtil) {
+
+    inner class ViewHolder(private val binding: ItemBookCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindBook(book: Book) {
+            //TODO create ui model for book
+            binding.itemBook.bookTitle.text = book.title
+            val percent = book.currentPage.divideToPercent(book.pages)
+            binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
+            binding.itemBook.bookProgressBar.progress = percent.toInt()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemBookCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(holder) {
-            with(books[position]) {
-                binding.itemBook.bookTitle.text = this.title
-                val percent = this.currentPage.divideToPercent(this.pages)
-                binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
-                binding.itemBook.bookProgressBar.progress = percent.toInt()
-                binding.itemBook.itemBookLayout.setOnClickListener {
-                    itemClick(this)
-                }
-            }
+        val book = getItem(position)
+        holder.bindBook(book)
+
+        holder.itemView.setOnClickListener {
+            itemClick(book)
         }
-    }
 
-    override fun getItemCount() = books.size
-
-    private fun Int.divideToPercent(divideTo: Int): Float {
-        return if (divideTo == 0) 0f
-        else (this / divideTo.toFloat()) * 100
-    }
-
-    private fun roundOffDecimal(number: Float): Float {
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.HALF_UP
-        return df.format(number).toFloat()
     }
 
 }
