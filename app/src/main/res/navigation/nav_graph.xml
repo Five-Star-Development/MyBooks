@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="dev.five_star.mybooks.booklist.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_addBookDialog"
+            app:destination="@id/addBookDialog" />
+        <action
+            android:id="@+id/action_mainFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addBookDialog"
+        android:name="dev.five_star.mybooks.booklist.AddBookDialog"
+        android:label="AddBookDialog" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="dev.five_star.mybooks.book_details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="book"
+            app:argType="dev.five_star.mybooks.Model.Book" />
+    </fragment>
+</navigation>
