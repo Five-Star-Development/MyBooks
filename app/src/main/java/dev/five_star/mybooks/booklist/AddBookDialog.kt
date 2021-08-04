@@ -1,4 +1,4 @@
-package dev.five_star.mybooks.View
+package dev.five_star.mybooks.booklist
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="dev.five_star.mybooks.View.MainFragment"
+        android:name="dev.five_star.mybooks.booklist.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_addBookDialog"
@@ -17,11 +17,11 @@
     </fragment>
     <dialog
         android:id="@+id/addBookDialog"
-        android:name="dev.five_star.mybooks.View.AddBookDialog"
+        android:name="dev.five_star.mybooks.booklist.AddBookDialog"
         android:label="AddBookDialog" />
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="dev.five_star.mybooks.View.DetailsFragment"
+        android:name="dev.five_star.mybooks.book_details.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
             android:name="book"

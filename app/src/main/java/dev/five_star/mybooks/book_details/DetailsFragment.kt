@@ -1,4 +1,4 @@
-package dev.five_star.mybooks.View
+package dev.five_star.mybooks.book_details
 
 import android.os.Bundle
 import android.view.KeyEvent
@@ -8,22 +8,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.Model.Dummy
 import dev.five_star.mybooks.Model.PagesEntry
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
-import dev.five_star.mybooks.databinding.ItemBookPageBinding
 import dev.five_star.mybooks.divideToPercent
 import dev.five_star.mybooks.roundOffDecimal
 
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -78,39 +73,6 @@ class DetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-}
-
-private object PagesDiffUtil : DiffUtil.ItemCallback<PagesEntry>() {
-    override fun areItemsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
-        return oldItem == newItem //TODO compare the id as soon as we have a database
-    }
-
-    override fun areContentsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
-        return (oldItem == newItem)
-    }
-}
-
-class PagesAdapter : ListAdapter<PagesEntry, PagesAdapter.ViewHolder>(PagesDiffUtil) {
-
-    inner class ViewHolder(private val binding: ItemBookPageBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bindPagesEntry(entry: PagesEntry) {
-            binding.enteredDate.text = entry.date
-            binding.page.text = entry.page
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            ItemBookPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val pagesEntry = getItem(position)
-        holder.bindPagesEntry(pagesEntry)
     }
 
 }
