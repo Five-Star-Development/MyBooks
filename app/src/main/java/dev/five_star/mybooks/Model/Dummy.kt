@@ -4,13 +4,13 @@ class Dummy {
 
     companion object {
         val bookList = mutableListOf(
-            Book("Book Number 1", 300, 3),
-            Book("Book Number 2", 300, 30),
-            Book("Book Number 3", 300, 233),
-            Book("Book Number 4", 300, 113),
-            Book("Book Number 5", 300, 299),
-            Book("Book Number 6", 300, 300),
-            Book("Book Number 7", 300, 100),
+            Book(1,"Book Number 1", 300, 3),
+            Book(2, "Book Number 2", 300, 30),
+            Book(3,"Book Number 3", 300, 233),
+            Book(4,"Book Number 4", 300, 113),
+            Book(5,"Book Number 5", 300, 299),
+            Book(6,"Book Number 6", 300, 300),
+            Book(7,"Book Number 7", 300, 100),
         )
 
         val pageList = mutableListOf(

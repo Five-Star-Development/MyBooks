@@ -25,7 +25,7 @@ class DetailsFragment : Fragment() {
 
     private val pagesEntryAdapter = PagesAdapter()
     private val args: DetailsFragmentArgs by navArgs()
-    private lateinit var book: Book
+    private lateinit var book : Book
 
 
     override fun onCreateView(

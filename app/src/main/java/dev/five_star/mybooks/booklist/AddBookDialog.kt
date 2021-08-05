@@ -37,6 +37,7 @@ class AddBookDialog : DialogFragment() {
             if(bookTitle.isNotEmpty() && bookPages > 0) {
                 Dummy.bookList.add(
                     Book(
+                        100,
                         bookTitle,
                         bookPages,
                         0
