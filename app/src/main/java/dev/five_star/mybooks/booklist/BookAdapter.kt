@@ -24,9 +24,9 @@ class BookAdapter(val itemClick: (position: Int) -> Unit) :
     inner class ViewHolder(private val binding: ItemBookCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindBook(bookItem: BookItem) {
-            binding.itemBook.bookTitle.text = bookItem.title
-            binding.itemBook.bookPercentText.text = bookItem.percentText
-            binding.itemBook.bookProgressBar.progress = bookItem.bookProcess
+            binding.itemBookLayout.bookTitle.text = bookItem.title
+            binding.itemBookLayout.bookPercentText.text = bookItem.percentText
+            binding.itemBookLayout.bookProgressBar.progress = bookItem.bookProcess
         }
     }
 

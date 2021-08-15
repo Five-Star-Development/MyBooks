@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.Model.Dummy
+import dev.five_star.mybooks.Model.toBookItem
 import dev.five_star.mybooks.Model.ui_model.BookItem
 
 class MainViewModel : ViewModel() {

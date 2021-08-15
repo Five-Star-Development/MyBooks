@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.five_star.mybooks.Model.Dummy
@@ -20,6 +20,7 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val bookAdapter = BookAdapter {
+        //TODO use the id and get the book from db
         val selectedBook = Dummy.bookList[it]
         val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(selectedBook)
         findNavController().navigate(action)
@@ -27,13 +28,8 @@ class MainFragment : Fragment() {
 //        viewModel.itemSelected(it)
     }
 
-    private lateinit var viewModel: MainViewModel
-    private lateinit var viewModelFactory: MainViewModelFactory
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModelFactory = MainViewModelFactory()
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory()
     }
 
     override fun onCreateView(
@@ -53,7 +49,7 @@ class MainFragment : Fragment() {
             adapter = bookAdapter
         }
 
-        binding.addBook.setOnClickListener {
+        binding.addBookButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_addBookDialog)
         }
 
