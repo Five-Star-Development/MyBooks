@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.five_star.mybooks.Model.Dummy
-import dev.five_star.mybooks.R
+import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -19,17 +18,13 @@ class MainFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val bookAdapter = BookAdapter {
+    private val bookAdapter = BookAdapter { bookId ->
         //TODO use the id and get the book from db
-        val selectedBook = Dummy.bookList[it]
-        val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(selectedBook)
-        findNavController().navigate(action)
-        //TODO why does this not work?
-//        viewModel.itemSelected(it)
+        viewModel.itemSelected(bookId)
     }
 
     private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory()
+        MainViewModelFactory(BookRepository())
     }
 
     override fun onCreateView(
@@ -50,15 +45,23 @@ class MainFragment : Fragment() {
         }
 
         binding.addBookButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_addBookDialog)
+            viewModel.addButtonClick()
         }
 
         viewModel.bookList.observe(viewLifecycleOwner) { bookList ->
             bookAdapter.submitList(bookList)
         }
 
-        viewModel.openBook.observe(viewLifecycleOwner) { book ->
-            val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(book)
+        viewModel.effect.observe(viewLifecycleOwner) { effect ->
+            val action = when(effect) {
+                is MainViewModel.Effect.ShowDetails -> {
+                    val bookId = effect.selectedBook
+                    MainFragmentDirections.actionMainFragmentToDetailsFragment(bookId)
+                }
+                MainViewModel.Effect.AddBook -> {
+                   MainFragmentDirections.actionMainFragmentToAddBookDialog()
+                }
+            }
             findNavController().navigate(action)
         }
     }

@@ -6,13 +6,13 @@ import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dev.five_star.mybooks.Model.Book
-import dev.five_star.mybooks.Model.Dummy
-import dev.five_star.mybooks.Model.PagesEntry
-import dev.five_star.mybooks.Model.toBookItem
-import dev.five_star.mybooks.Model.ui_model.BookItem
+import dev.five_star.mybooks.data.BookRepository
+import dev.five_star.mybooks.model.Book
+import dev.five_star.mybooks.model.PagesEntry
+import dev.five_star.mybooks.model.toBookItem
+import dev.five_star.mybooks.model.ui_model.BookItem
 
-class DetailsViewModel(private val book: Book) : ViewModel() {
+class DetailsViewModel(private val book: Book, private val repository: BookRepository) : ViewModel() {
 
     private var _bookDetails: MutableLiveData<BookItem> = MutableLiveData()
     val bookDetails: LiveData<BookItem> = _bookDetails
@@ -33,11 +33,11 @@ class DetailsViewModel(private val book: Book) : ViewModel() {
     }
 
     private fun setPagesList() {
-        _pagesList.postValue(Dummy.pageList)
+        _pagesList.postValue(repository.getPagesForBook(book))
     }
 
     private fun pagesValid(enteredPage: String) : Boolean {
-        val lastPage = Dummy.pageList.last().page.toInt()
+        val lastPage = repository.getPagesForBook(book).last().page.toInt()
         return (lastPage < enteredPage.toInt())
     }
 
@@ -49,10 +49,10 @@ class DetailsViewModel(private val book: Book) : ViewModel() {
         return if (keyEvent.action == KeyEvent.ACTION_DOWN &&
             keyCode == KeyEvent.KEYCODE_ENTER && pagesValid(enteredPage)
         ) {
-            Dummy.pageList.add(PagesEntry("today", enteredPage))
+            repository.addPageEntry(enteredPage)
             //TODO I think this should not happen directly on the view
             pageEntry.postValue(null)
-            _pagesList.postValue(Dummy.pageList)
+            _pagesList.postValue(repository.getPagesForBook(book))
             true
         } else {
             false

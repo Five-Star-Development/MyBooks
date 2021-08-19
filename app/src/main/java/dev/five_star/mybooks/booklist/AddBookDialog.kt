@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import dev.five_star.mybooks.Model.Book
-import dev.five_star.mybooks.Model.Dummy
+import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 
 class AddBookDialog : DialogFragment() {
@@ -15,6 +14,8 @@ class AddBookDialog : DialogFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val repository = BookRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,14 +36,7 @@ class AddBookDialog : DialogFragment() {
             val bookPages: Int = if (bookPagesInput.isEmpty()) 0 else bookPagesInput.toInt()
 
             if(bookTitle.isNotEmpty() && bookPages > 0) {
-                Dummy.bookList.add(
-                    Book(
-                        100,
-                        bookTitle,
-                        bookPages,
-                        0
-                    )
-                )
+                repository.addBook(bookTitle, bookPages)
                 dismiss()
             }
 

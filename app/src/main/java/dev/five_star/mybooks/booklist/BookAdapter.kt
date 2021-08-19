@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.five_star.mybooks.Model.ui_model.BookItem
 import dev.five_star.mybooks.databinding.ItemBookCardBinding
+import dev.five_star.mybooks.model.ui_model.BookItem
 
 private object BookDiffUtil : DiffUtil.ItemCallback<BookItem>() {
     override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
@@ -41,7 +41,8 @@ class BookAdapter(val itemClick: (position: Int) -> Unit) :
         holder.bindBook(book)
 
         holder.itemView.setOnClickListener {
-            itemClick(position)
+
+            itemClick(getItem(position).id)
         }
 
     }

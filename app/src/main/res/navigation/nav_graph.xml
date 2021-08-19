@@ -25,6 +25,6 @@
         android:label="DetailsFragment" >
         <argument
             android:name="book"
-            app:argType="dev.five_star.mybooks.Model.Book" />
+            app:argType="dev.five_star.mybooks.model.Book" />
     </fragment>
 </navigation>
