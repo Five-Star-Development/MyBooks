@@ -24,6 +24,9 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
     private val _effects = SingleLiveEvent<Effect>()
     val effect: LiveData<Effect> = _effects
 
+    private val _dialogEffect = SingleLiveEvent<DialogEffect>()
+    val dialogEffect: LiveData<DialogEffect> = _dialogEffect
+
     init {
         getBookList()
     }
@@ -33,14 +36,46 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         _bookList.postValue(bookItemList)
     }
 
-    fun itemSelected(bookId: Int) {
+    private fun openBookDetails(bookId: Int) {
         // TODO don't do the db call, use the id and call the db in the detailsFragment
-        val selectedBook = repository.getBook(bookId)
+        val selectedBook = repository.getBook(bookId - 1)
         _effects.postValue(Effect.ShowDetails(selectedBook))
     }
 
-    fun addButtonClick() {
-        _effects.postValue(Effect.AddBook)
+    private fun addBook(bookTitle: String,  bookPages: Int) {
+        if(bookTitle.isNotEmpty() && bookPages > 0) {
+            val entered = repository.addBook(bookTitle, bookPages)
+            if (entered) {
+                _dialogEffect.postValue(DialogEffect.CloseAddBook)
+                getBookList()
+            }
+        }
+    }
+
+//    fun addButtonClick() {
+//        _effects.postValue(Effect.AddBook)
+//    }
+
+    fun dataInput(input: Input) = when(input) {
+        Input.LoadBookList -> getBookList()
+        Input.ShowAddBook -> {
+            _effects.postValue(Effect.AddBook)
+        }
+        is Input.SelectItem -> {
+            openBookDetails(input.bookId)
+        }
+        is Input.AddBook -> {
+            val bookTitle = input.bookTitleInput.trim()
+            val bookPages: Int = if (input.bookPagesInput.isEmpty()) 0 else input.bookPagesInput.toInt()
+            addBook(bookTitle, bookPages)
+        }
+    }
+
+    sealed class Input {
+        object LoadBookList : Input()
+        object ShowAddBook : Input()
+        data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Input()
+        data class SelectItem(val bookId: Int) : Input()
     }
 
     sealed class Effect {
@@ -48,4 +83,7 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         object AddBook : Effect()
     }
 
+    sealed class DialogEffect {
+        object CloseAddBook : DialogEffect()
+    }
 }

@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dev.five_star.mybooks.booklist.MainViewModel.Input
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.FragmentMainBinding
 
@@ -20,11 +21,11 @@ class MainFragment : Fragment() {
 
     private val bookAdapter = BookAdapter { bookId ->
         //TODO use the id and get the book from db
-        viewModel.itemSelected(bookId)
+        viewModel.dataInput(Input.SelectItem(bookId))
     }
 
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(BookRepository())
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(BookRepository)
     }
 
     override fun onCreateView(
@@ -45,7 +46,7 @@ class MainFragment : Fragment() {
         }
 
         binding.addBookButton.setOnClickListener {
-            viewModel.addButtonClick()
+            viewModel.dataInput(Input.ShowAddBook)
         }
 
         viewModel.bookList.observe(viewLifecycleOwner) { bookList ->

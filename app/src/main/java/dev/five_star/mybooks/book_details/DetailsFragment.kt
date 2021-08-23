@@ -22,7 +22,7 @@ class DetailsFragment : Fragment() {
     private val args: DetailsFragmentArgs by navArgs()
 
     private val viewModel: DetailsViewModel by viewModels {
-        DetailsViewModelFactory(args.book, BookRepository())
+        DetailsViewModelFactory(args.book, BookRepository)
     }
 
     override fun onCreateView(

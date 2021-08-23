@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 
+const val TAG = "AddBookDialog"
 class AddBookDialog : DialogFragment() {
 
     private var _binding: DialogNewBookBinding? = null
@@ -15,7 +17,9 @@ class AddBookDialog : DialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val repository = BookRepository()
+    private val viewModel : MainViewModel by activityViewModels {
+        MainViewModelFactory(BookRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,16 +34,15 @@ class AddBookDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addButton.setOnClickListener {
-
-            val bookTitle: String = binding.bookTitle.text.toString()
+            val bookTitleInput: String = binding.bookTitle.text.toString()
             val bookPagesInput: String = binding.pages.text.toString()
-            val bookPages: Int = if (bookPagesInput.isEmpty()) 0 else bookPagesInput.toInt()
+            viewModel.dataInput(MainViewModel.Input.AddBook(bookTitleInput, bookPagesInput))
+        }
 
-            if(bookTitle.isNotEmpty() && bookPages > 0) {
-                repository.addBook(bookTitle, bookPages)
-                dismiss()
+        viewModel.dialogEffect.observe(viewLifecycleOwner) {
+            when(it) {
+                MainViewModel.DialogEffect.CloseAddBook -> dismiss()
             }
-
         }
     }
 
