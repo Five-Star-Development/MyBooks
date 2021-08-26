@@ -1,16 +1,20 @@
 package dev.five_star.mybooks.booklist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.five_star.mybooks.booklist.MainViewModel.Input
+import dev.five_star.mybooks.R
+import dev.five_star.mybooks.booklist.MainViewModel.Event
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.FragmentMainBinding
+
+private const val TAG = "MainFragment"
 
 class MainFragment : Fragment() {
 
@@ -21,10 +25,10 @@ class MainFragment : Fragment() {
 
     private val bookAdapter = BookAdapter { bookId ->
         //TODO use the id and get the book from db
-        viewModel.dataInput(Input.SelectItem(bookId))
+        viewModel.dataInput(Event.SelectItem(bookId))
     }
 
-    private val viewModel: MainViewModel by activityViewModels {
+    private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) {
         MainViewModelFactory(BookRepository)
     }
 
@@ -46,7 +50,7 @@ class MainFragment : Fragment() {
         }
 
         binding.addBookButton.setOnClickListener {
-            viewModel.dataInput(Input.ShowAddBook)
+            viewModel.dataInput(Event.ShowAddBook)
         }
 
         viewModel.bookList.observe(viewLifecycleOwner) { bookList ->
@@ -65,6 +69,11 @@ class MainFragment : Fragment() {
             }
             findNavController().navigate(action)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
     }
 
     override fun onDestroyView() {

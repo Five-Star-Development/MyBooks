@@ -49,33 +49,31 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
                 _dialogEffect.postValue(DialogEffect.CloseAddBook)
                 getBookList()
             }
+        } else {
+            //TODO inform the user about the error
         }
     }
 
-//    fun addButtonClick() {
-//        _effects.postValue(Effect.AddBook)
-//    }
-
-    fun dataInput(input: Input) = when(input) {
-        Input.LoadBookList -> getBookList()
-        Input.ShowAddBook -> {
+    fun dataInput(event: Event) = when(event) {
+        Event.LoadBookList -> getBookList()
+        Event.ShowAddBook -> {
             _effects.postValue(Effect.AddBook)
         }
-        is Input.SelectItem -> {
-            openBookDetails(input.bookId)
+        is Event.SelectItem -> {
+            openBookDetails(event.bookId)
         }
-        is Input.AddBook -> {
-            val bookTitle = input.bookTitleInput.trim()
-            val bookPages: Int = if (input.bookPagesInput.isEmpty()) 0 else input.bookPagesInput.toInt()
+        is Event.AddBook -> {
+            val bookTitle = event.bookTitleInput.trim()
+            val bookPages: Int = if (event.bookPagesInput.isEmpty()) 0 else event.bookPagesInput.toInt()
             addBook(bookTitle, bookPages)
         }
     }
 
-    sealed class Input {
-        object LoadBookList : Input()
-        object ShowAddBook : Input()
-        data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Input()
-        data class SelectItem(val bookId: Int) : Input()
+    sealed class Event {
+        object LoadBookList : Event()
+        object ShowAddBook : Event()
+        data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Event()
+        data class SelectItem(val bookId: Int) : Event()
     }
 
     sealed class Effect {

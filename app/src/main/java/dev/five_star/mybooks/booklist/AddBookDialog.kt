@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.navigation.navGraphViewModels
+import dev.five_star.mybooks.R
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 
-const val TAG = "AddBookDialog"
+private const val TAG = "AddBookDialog"
 class AddBookDialog : DialogFragment() {
 
     private var _binding: DialogNewBookBinding? = null
@@ -17,9 +18,11 @@ class AddBookDialog : DialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val viewModel : MainViewModel by activityViewModels {
+    private val viewModel : MainViewModel by navGraphViewModels(R.id.nav_graph) {
         MainViewModelFactory(BookRepository)
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +39,7 @@ class AddBookDialog : DialogFragment() {
         binding.addButton.setOnClickListener {
             val bookTitleInput: String = binding.bookTitle.text.toString()
             val bookPagesInput: String = binding.pages.text.toString()
-            viewModel.dataInput(MainViewModel.Input.AddBook(bookTitleInput, bookPagesInput))
+            viewModel.dataInput(MainViewModel.Event.AddBook(bookTitleInput, bookPagesInput))
         }
 
         viewModel.dialogEffect.observe(viewLifecycleOwner) {
