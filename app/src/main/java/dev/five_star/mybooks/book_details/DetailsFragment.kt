@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.five_star.mybooks.data.BookRepository
+import dev.five_star.mybooks.MyBookApplication
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
 
 class DetailsFragment : Fragment() {
@@ -21,8 +21,9 @@ class DetailsFragment : Fragment() {
     private val pagesEntryAdapter = PagesAdapter()
     private val args: DetailsFragmentArgs by navArgs()
 
+
     private val viewModel: DetailsViewModel by viewModels {
-        DetailsViewModelFactory(args.book, BookRepository)
+        DetailsViewModelFactory(args.bookId, (requireActivity().application as MyBookApplication).bookRepository)
     }
 
     override fun onCreateView(

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.navGraphViewModels
+import dev.five_star.mybooks.MyBookApplication
 import dev.five_star.mybooks.R
-import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 
 private const val TAG = "AddBookDialog"
@@ -19,10 +19,8 @@ class AddBookDialog : DialogFragment() {
     private val binding get() = _binding!!
 
     private val viewModel : MainViewModel by navGraphViewModels(R.id.nav_graph) {
-        MainViewModelFactory(BookRepository)
+        MainViewModelFactory((requireActivity().application as MyBookApplication).bookRepository)
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
