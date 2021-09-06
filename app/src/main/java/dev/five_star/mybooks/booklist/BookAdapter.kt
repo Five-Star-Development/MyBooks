@@ -5,32 +5,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.five_star.mybooks.Model.Book
 import dev.five_star.mybooks.databinding.ItemBookCardBinding
-import dev.five_star.mybooks.divideToPercent
-import dev.five_star.mybooks.roundOffDecimal
+import dev.five_star.mybooks.model.ui_model.BookItem
 
-private object BookDiffUtil : DiffUtil.ItemCallback<Book>() {
-    override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+private object BookDiffUtil : DiffUtil.ItemCallback<BookItem>() {
+    override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
         return oldItem == newItem //TODO compare the id as soon as we have a database
     }
 
-    override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
+    override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
         return (oldItem == newItem)
     }
 }
 
-class BookAdapter(val itemClick: (book: Book) -> Unit) :
-    ListAdapter<Book, BookAdapter.ViewHolder>(BookDiffUtil) {
+class BookAdapter(val itemClick: (position: Int) -> Unit) :
+    ListAdapter<BookItem, BookAdapter.ViewHolder>(BookDiffUtil) {
 
     inner class ViewHolder(private val binding: ItemBookCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindBook(book: Book) {
-            //TODO create ui model for book
-            binding.itemBook.bookTitle.text = book.title
-            val percent = book.currentPage.divideToPercent(book.pages)
-            binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
-            binding.itemBook.bookProgressBar.progress = percent.toInt()
+        fun bindBook(bookItem: BookItem) {
+            binding.itemBookLayout.bookTitle.text = bookItem.title
+            binding.itemBookLayout.bookPercentText.text = bookItem.percentText
+            binding.itemBookLayout.bookProgressBar.progress = bookItem.bookProcess
         }
     }
 
@@ -45,7 +41,8 @@ class BookAdapter(val itemClick: (book: Book) -> Unit) :
         holder.bindBook(book)
 
         holder.itemView.setOnClickListener {
-            itemClick(book)
+
+            itemClick(getItem(position).id)
         }
 
     }

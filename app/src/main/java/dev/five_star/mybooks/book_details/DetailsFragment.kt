@@ -1,20 +1,15 @@
 package dev.five_star.mybooks.book_details
 
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.five_star.mybooks.Model.Book
-import dev.five_star.mybooks.Model.Dummy
-import dev.five_star.mybooks.Model.PagesEntry
+import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
-import dev.five_star.mybooks.divideToPercent
-import dev.five_star.mybooks.roundOffDecimal
 
 class DetailsFragment : Fragment() {
 
@@ -25,8 +20,10 @@ class DetailsFragment : Fragment() {
 
     private val pagesEntryAdapter = PagesAdapter()
     private val args: DetailsFragmentArgs by navArgs()
-    private lateinit var book: Book
 
+    private val viewModel: DetailsViewModel by viewModels {
+        DetailsViewModelFactory(args.book, BookRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,33 +37,27 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        book = args.book
-
-        binding.itemBook.bookTitle.text = book.title
-        val percent = book.currentPage.divideToPercent(book.pages)
-        binding.itemBook.bookPercentText.text = "${roundOffDecimal(percent)} %"
-        binding.itemBook.bookProgressBar.progress = percent.toInt()
-
         binding.pagesList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = pagesEntryAdapter
-            pagesEntryAdapter.submitList(Dummy.pageList)
         }
 
+        viewModel.bookDetails.observe(viewLifecycleOwner, { bookItem ->
+            binding.itemBook.bookTitle.text = bookItem.title
+            binding.itemBook.bookPercentText.text = bookItem.percentText
+            binding.itemBook.bookProgressBar.progress = bookItem.bookProcess
+        })
+
+        viewModel.pagesList.observe(viewLifecycleOwner, { pageList ->
+            pagesEntryAdapter.submitList(pageList)
+        })
+
+        viewModel.pageEntry.observe(viewLifecycleOwner, {
+            binding.pagesEntry.setText(it)
+        })
+
         binding.pagesEntry.setOnKeyListener { view, keyCode, keyEvent ->
-            if (view !is TextView) {
-                return@setOnKeyListener false
-            }
-            if (keyEvent.action == KeyEvent.ACTION_DOWN &&
-                keyCode == KeyEvent.KEYCODE_ENTER
-            ) {
-                Dummy.pageList.add(
-                    PagesEntry("today", view.text.toString())
-                )
-                view.text = null
-                return@setOnKeyListener true
-            }
-            return@setOnKeyListener false
+            return@setOnKeyListener viewModel.verifyEnter(view, keyEvent, keyCode)
         }
     }
 

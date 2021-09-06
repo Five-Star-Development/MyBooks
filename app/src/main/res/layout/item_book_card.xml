@@ -10,7 +10,7 @@
     app:cardElevation="5dp">
 
     <include
-        android:id="@+id/item_book"
+        android:id="@+id/item_book_layout"
         layout="@layout/item_book" />
 
 </com.google.android.material.card.MaterialCardView>

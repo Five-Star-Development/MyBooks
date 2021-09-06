@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.five_star.mybooks.Model.PagesEntry
+import dev.five_star.mybooks.model.PagesEntry
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
 
 private object PagesDiffUtil : DiffUtil.ItemCallback<PagesEntry>() {

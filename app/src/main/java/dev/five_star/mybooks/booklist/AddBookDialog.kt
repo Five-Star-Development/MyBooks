@@ -5,16 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import dev.five_star.mybooks.Model.Book
-import dev.five_star.mybooks.Model.Dummy
+import androidx.navigation.navGraphViewModels
+import dev.five_star.mybooks.R
+import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 
+private const val TAG = "AddBookDialog"
 class AddBookDialog : DialogFragment() {
 
     private var _binding: DialogNewBookBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val viewModel : MainViewModel by navGraphViewModels(R.id.nav_graph) {
+        MainViewModelFactory(BookRepository)
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,22 +37,15 @@ class AddBookDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addButton.setOnClickListener {
-
-            val bookTitle: String = binding.bookTitle.text.toString()
+            val bookTitleInput: String = binding.bookTitle.text.toString()
             val bookPagesInput: String = binding.pages.text.toString()
-            val bookPages: Int = if (bookPagesInput.isEmpty()) 0 else bookPagesInput.toInt()
+            viewModel.dataInput(MainViewModel.Event.AddBook(bookTitleInput, bookPagesInput))
+        }
 
-            if(bookTitle.isNotEmpty() && bookPages > 0) {
-                Dummy.bookList.add(
-                    Book(
-                        bookTitle,
-                        bookPages,
-                        0
-                    )
-                )
-                dismiss()
+        viewModel.dialogEffect.observe(viewLifecycleOwner) {
+            when(it) {
+                MainViewModel.DialogEffect.CloseAddBook -> dismiss()
             }
-
         }
     }
 
