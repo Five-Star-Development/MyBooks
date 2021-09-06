@@ -7,13 +7,17 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="dev.five_star.mybooks.booklist.MainFragment"
-        android:label="MainFragment" >
+        android:label="MainFragment">
         <action
             android:id="@+id/action_mainFragment_to_addBookDialog"
             app:destination="@id/addBookDialog" />
         <action
             android:id="@+id/action_mainFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <dialog
         android:id="@+id/addBookDialog"
@@ -22,9 +26,16 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="dev.five_star.mybooks.book_details.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:label="DetailsFragment">
         <argument
-            android:name="book"
-            app:argType="dev.five_star.mybooks.model.Book" />
+            android:name="bookId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_detailsFragment_to_mainFragment2"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>
