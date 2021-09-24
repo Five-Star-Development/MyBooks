@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.five_star.mybooks.MyBookApplication
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
+import dev.five_star.mybooks.requireMyBookApplication
 
 class DetailsFragment : Fragment() {
 
@@ -23,7 +23,7 @@ class DetailsFragment : Fragment() {
 
 
     private val viewModel: DetailsViewModel by viewModels {
-        DetailsViewModelFactory(args.bookId, (requireActivity().application as MyBookApplication).bookRepository)
+        DetailsViewModelFactory(args.bookId, requireMyBookApplication().bookRepository)
     }
 
     override fun onCreateView(

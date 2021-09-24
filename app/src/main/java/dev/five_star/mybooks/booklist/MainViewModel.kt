@@ -58,11 +58,10 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
                 repository.addBook(newBook)
                 _dialogEffect.postValue(DialogEffect.CloseAddBook)
 
-                //TODO how can I do this with room?
-//                val entered = repository.addBook(newBook)
-//                if (entered) {
-//                    _dialogEffect.postValue(DialogEffect.CloseAddBook)
-//                }
+                val entered = repository.addBook(newBook)
+                if (entered) {
+                    _dialogEffect.postValue(DialogEffect.CloseAddBook)
+                }
             }
 
         } else {

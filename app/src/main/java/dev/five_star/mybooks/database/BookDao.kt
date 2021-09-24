@@ -1,9 +1,6 @@
 package dev.five_star.mybooks.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,12 +10,15 @@ interface BookDao {
     fun getAllBooks(): Flow<List<Book>>
 
     @Query("SELECT * FROM book_table WHERE id = :bookId")
-    fun getBook(bookId: Int) : Book
+    suspend fun getBook(bookId: Int) : Book
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBook(book: Book)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBook(book: Book) : Long
 
-    @Query("DELETE FROM book_table WHERE id = :bookId")
-    suspend fun deleteBook(bookId: Int)
+    @Update
+    suspend fun updateBook(book: Book) : Int
+
+    @Delete
+    suspend fun deleteBook(book: Book) : Int
 
 }

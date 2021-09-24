@@ -1,11 +1,26 @@
 package dev.five_star.mybooks
 
+import android.app.Activity
 import android.app.Application
+import androidx.fragment.app.Fragment
+import androidx.room.Room
 import dev.five_star.mybooks.data.BookRepository
+import dev.five_star.mybooks.data.BookRepositoryImpl
 import dev.five_star.mybooks.database.BookRoomDatabase
 
 class MyBookApplication : Application() {
 
-    val database by lazy { BookRoomDatabase.getDatabase(this) }
-    val bookRepository by lazy { BookRepository(database.bookDao()) }
+    val database by lazy {
+        Room.databaseBuilder(
+            this,
+            BookRoomDatabase::class.java,
+            "book_database"
+        ).build()
+    }
+
+    val bookRepository : BookRepository by lazy { BookRepositoryImpl(database.bookDao()) }
 }
+
+fun Fragment.requireMyBookApplication() = requireActivity().application as MyBookApplication
+
+fun Activity.requireMyBookApplication() = application as MyBookApplication
