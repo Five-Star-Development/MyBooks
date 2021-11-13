@@ -1,16 +1,12 @@
 package dev.five_star.mybooks.booklist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import dev.five_star.mybooks.MainCoroutineRule
 import dev.five_star.mybooks.data.BookRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,17 +21,9 @@ class MainViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    val dispatcher = TestCoroutineDispatcher()
-
-    @Before
-    fun setup() {
-        Dispatchers.setMain(dispatcher)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     lateinit var testBookRepo : BookRepository
     lateinit var testMainViewModel: MainViewModel
