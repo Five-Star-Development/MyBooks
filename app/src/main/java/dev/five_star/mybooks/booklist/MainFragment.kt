@@ -63,7 +63,7 @@ class MainFragment : Fragment() {
                     val bookId = effect.bookId
                     MainFragmentDirections.actionMainFragmentToDetailsFragment(bookId)
                 }
-                MainViewModel.Effect.AddBook -> {
+                MainViewModel.Effect.BookAdded -> {
                    MainFragmentDirections.actionMainFragmentToAddBookDialog()
                 }
             }
