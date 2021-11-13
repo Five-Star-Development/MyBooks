@@ -1,19 +1,24 @@
 package dev.five_star.mybooks.booklist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import dev.five_star.mybooks.data.BookRepository
+import dev.five_star.mybooks.database.toBookItem
 import dev.five_star.mybooks.model.Book
-import dev.five_star.mybooks.model.toBookItem
 import dev.five_star.mybooks.model.ui_model.BookItem
 import dev.five_star.mybooks.utils.SingleLiveEvent
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 
 class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
     private val _bookList: MutableLiveData<List<BookItem>> = MutableLiveData<List<BookItem>>()
-    val bookList: LiveData<List<BookItem>> = _bookList
+    val bookList: LiveData<List<BookItem>> = repository.getAllBooks().mapLatest { it ->
+        it.map { it.toBookItem() }
+    }.asLiveData()
+
+    val testBookList = repository.getAllBooks().asLiveData()
+
 
     private val _navigateTo = MutableLiveData<NavDirections>()
     val navigateTo: LiveData<NavDirections> = _navigateTo
@@ -28,34 +33,43 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
     val dialogEffect: LiveData<DialogEffect> = _dialogEffect
 
     init {
-        getBookList()
+//        getBookList()
+
     }
 
-    private fun getBookList() {
-        val bookItemList: List<BookItem> = repository.getAllBooks().map { it.toBookItem() }
-        _bookList.postValue(bookItemList)
-    }
+//    private fun getBookList() {
+//        val bookItemList: List<BookItem> = repository.getAllBooks().map { it.toBookItem() }
+//        _bookList.postValue(bookItemList)
+//    }
 
     private fun openBookDetails(bookId: Int) {
-        // TODO don't do the db call, use the id and call the db in the detailsFragment
-        val selectedBook = repository.getBook(bookId - 1)
-        _effects.postValue(Effect.ShowDetails(selectedBook))
+        _effects.postValue(Effect.ShowDetails(bookId))
     }
 
     private fun addBook(bookTitle: String,  bookPages: Int) {
         if(bookTitle.isNotEmpty() && bookPages > 0) {
-            val entered = repository.addBook(bookTitle, bookPages)
-            if (entered) {
+            // are there any differents?
+            viewModelScope.launch {
+                val newBook = dev.five_star.mybooks.database.Book(
+                    title = bookTitle,
+                    pages = bookPages,
+                )
+
+                repository.addBook(newBook)
                 _dialogEffect.postValue(DialogEffect.CloseAddBook)
-                getBookList()
+
+                val entered = repository.addBook(newBook)
+                if (entered) {
+                    _dialogEffect.postValue(DialogEffect.CloseAddBook)
+                }
             }
+
         } else {
             //TODO inform the user about the error
         }
     }
 
     fun dataInput(event: Event) = when(event) {
-        Event.LoadBookList -> getBookList()
         Event.ShowAddBook -> {
             _effects.postValue(Effect.AddBook)
         }
@@ -70,14 +84,13 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
     }
 
     sealed class Event {
-        object LoadBookList : Event()
         object ShowAddBook : Event()
         data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Event()
         data class SelectItem(val bookId: Int) : Event()
     }
 
     sealed class Effect {
-        data class ShowDetails(val selectedBook: Book) : Effect()
+        data class ShowDetails(val bookId: Int) : Effect()
         object AddBook : Effect()
     }
 
@@ -85,3 +98,4 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         object CloseAddBook : DialogEffect()
     }
 }
+

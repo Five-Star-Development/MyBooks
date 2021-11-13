@@ -11,8 +11,8 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.booklist.MainViewModel.Event
-import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.databinding.FragmentMainBinding
+import dev.five_star.mybooks.requireMyBookApplication
 
 private const val TAG = "MainFragment"
 
@@ -29,7 +29,7 @@ class MainFragment : Fragment() {
     }
 
     private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) {
-        MainViewModelFactory(BookRepository)
+        MainViewModelFactory(requireMyBookApplication().bookRepository)
     }
 
     override fun onCreateView(
@@ -60,7 +60,7 @@ class MainFragment : Fragment() {
         viewModel.effect.observe(viewLifecycleOwner) { effect ->
             val action = when(effect) {
                 is MainViewModel.Effect.ShowDetails -> {
-                    val bookId = effect.selectedBook
+                    val bookId = effect.bookId
                     MainFragmentDirections.actionMainFragmentToDetailsFragment(bookId)
                 }
                 MainViewModel.Effect.AddBook -> {

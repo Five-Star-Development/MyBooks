@@ -3,6 +3,7 @@
     package="dev.five_star.mybooks">
 
     <application
+        android:name=".MyBookApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
