@@ -5,26 +5,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.five_star.mybooks.model.PagesEntry
+import dev.five_star.mybooks.database.PageEntry
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
+import java.text.SimpleDateFormat
 
-private object PagesDiffUtil : DiffUtil.ItemCallback<PagesEntry>() {
-    override fun areItemsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
+private object PagesDiffUtil : DiffUtil.ItemCallback<PageEntry>() {
+    override fun areItemsTheSame(oldItem: PageEntry, newItem: PageEntry): Boolean {
         return oldItem == newItem //TODO compare the id as soon as we have a database
     }
 
-    override fun areContentsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
+    override fun areContentsTheSame(oldItem: PageEntry, newItem: PageEntry): Boolean {
         return (oldItem == newItem)
     }
 }
 
-class PagesAdapter : ListAdapter<PagesEntry, PagesAdapter.ViewHolder>(PagesDiffUtil) {
+class PagesAdapter : ListAdapter<PageEntry, PagesAdapter.ViewHolder>(PagesDiffUtil) {
 
     inner class ViewHolder(private val binding: ItemBookPageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindPagesEntry(entry: PagesEntry) {
-            binding.enteredDate.text = entry.date
-            binding.page.text = entry.page
+        fun bindPagesEntry(entry: PageEntry) {
+            val pattern = "dd.MM.yyyy"
+            val simpleDateFormat = SimpleDateFormat(pattern)
+            binding.enteredDate.text = simpleDateFormat.format(entry.date)
+            binding.page.text = entry.pages.toString()
         }
     }
 

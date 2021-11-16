@@ -2,10 +2,12 @@ package dev.five_star.mybooks.data
 
 import dev.five_star.mybooks.database.Book
 import dev.five_star.mybooks.database.BookDao
+import dev.five_star.mybooks.database.PageEntry
+import dev.five_star.mybooks.database.PagesDao
 import dev.five_star.mybooks.model.PagesEntry
 import kotlinx.coroutines.flow.Flow
 
-class BookRepositoryImpl(private val bookDao: BookDao) : BookRepository {
+class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: PagesDao) : BookRepository {
 
     private val pageList = mutableListOf(
         PagesEntry("13.03.2021", "13"),
@@ -30,17 +32,21 @@ class BookRepositoryImpl(private val bookDao: BookDao) : BookRepository {
         return result > 0
     }
 
-    // Haha this is part of the faknes ;-)
-    override fun getPagesForBook(book: Book): List<PagesEntry> {
-        return pageList
+//    //TODO store the book, or the id?
+//    override fun getPagesForBook(book: Book): Flow<List<PageEntry>> {
+//        return pagesDao.getPageForBook(book)
+//    }
+
+    override fun getPagesForBook(bookId: Int): Flow<List<PageEntry>> {
+        return pagesDao.getPagesForBook(bookId)
     }
 
-    override fun getPagesForBook(bookId: Int): List<PagesEntry> {
-        return pageList
+    override suspend fun getLastPageForBook(bookId: Int): Int {
+        return pagesDao.getLastPageForBook(bookId)
     }
 
-    override fun addPageEntry(enteredPage: String) {
-        pageList.add(PagesEntry("today", enteredPage))
+    override suspend fun addPageEntry(pageEntry: PageEntry) {
+        pagesDao.insertPages(pageEntry)
     }
 
 
