@@ -37,16 +37,21 @@ class MainViewModelTest {
     @Test
     fun `show add book dialog`() {
         testMainViewModel.dataInput(MainViewModel.Event.ShowAddBook)
-        assertThat(testMainViewModel.effect.value, `is` (MainViewModel.Effect.BookAdded))
+        val mostRecentEffect = testMainViewModel.effect.value
+        assertThat(mostRecentEffect, `is` (MainViewModel.Effect.BookAdded))
     }
 
     @Test
     fun `open selected item`() {
         val testBookId = 1
-        testMainViewModel.dataInput(MainViewModel.Event.SelectItem(1))
+        testMainViewModel.dataInput(MainViewModel.Event.SelectItem(testBookId))
         val effect = testMainViewModel.effect.value
         if (effect is MainViewModel.Effect.ShowDetails) {
-            assertThat(effect.bookId, `is` (testBookId))
+            assert(effect.bookId == testBookId) {
+                "error message here"
+            }
+        } else {
+            assert(false)
         }
     }
 
