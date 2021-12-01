@@ -7,7 +7,8 @@ import androidx.lifecycle.*
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.database.PageEntry
 import dev.five_star.mybooks.database.toBookItem
-import dev.five_star.mybooks.model.ui_model.BookItem
+import dev.five_star.mybooks.ui_common.BookItem
+import dev.five_star.mybooks.ui_common.ui_model.BookItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,6 +60,7 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
                 val pagesEntry = PageEntry(bookId = bookId, date = Date(), pages = page)
                 viewModelScope.launch {
                     repository.addPageEntry(pagesEntry)
+                    setBookDetails()
                 }
                 //TODO I think this should not happen directly on the view
                 pageEntry.postValue(null)

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.five_star.mybooks.databinding.ItemBookCardBinding
-import dev.five_star.mybooks.model.ui_model.BookItem
+import dev.five_star.mybooks.ui_common.ui_model.BookItem
 
 private object BookDiffUtil : DiffUtil.ItemCallback<BookItem>() {
     override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
