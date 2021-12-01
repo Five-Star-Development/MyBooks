@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 import dev.five_star.mybooks.utils.Converters
 
 @Database(
-    entities = [Book::class, PageEntry::class],
+    entities = [BookEntry::class, PageEntry::class],
     version = 2,
     exportSchema = true,
     autoMigrations = [

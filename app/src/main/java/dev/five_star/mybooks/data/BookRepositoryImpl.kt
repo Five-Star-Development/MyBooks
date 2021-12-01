@@ -1,35 +1,31 @@
 package dev.five_star.mybooks.data
 
-import dev.five_star.mybooks.database.Book
 import dev.five_star.mybooks.database.BookDao
+import dev.five_star.mybooks.database.BookEntry
 import dev.five_star.mybooks.database.PageEntry
 import dev.five_star.mybooks.database.PagesDao
-import dev.five_star.mybooks.model.PagesEntry
 import kotlinx.coroutines.flow.Flow
 
 class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: PagesDao) : BookRepository {
-
-    private val pageList = mutableListOf(
-        PagesEntry("13.03.2021", "13"),
-        PagesEntry("14.03.2021", "35"),
-        PagesEntry("15.03.2021", "67"),
-        PagesEntry("16.03.2021", "89"),
-        PagesEntry("17.03.2021", "111"),
-    )
-
 
     override fun getAllBooks(): Flow<List<Book>> {
         return bookDao.getAllBooks()
     }
 
-    override suspend fun getBook(id: Int): Book {
+    override suspend fun getBook(id: Int): BookEntry {
         return bookDao.getBook(id)
     }
 
 
-    override suspend fun addBook(book: Book) : Boolean {
+    override suspend fun addBook(book: BookEntry) : Boolean {
         val result = bookDao.insertBook(book)
         return result > 0
+    }
+
+    override suspend fun updateCurrentPage(id: Int, currentPage: Int) {
+//        val book = bookDao.getBook(id)
+//        book.currentPage = currentPage
+//        bookDao.updateBook(book)
     }
 
 //    //TODO store the book, or the id?
@@ -42,11 +38,12 @@ class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: Pag
     }
 
     override suspend fun getLastPageForBook(bookId: Int): Int {
-        return pagesDao.getLastPageForBook(bookId)
+        return pagesDao.getLastPageForBook(bookId) ?: 0
     }
 
     override suspend fun addPageEntry(pageEntry: PageEntry) {
         pagesDao.insertPages(pageEntry)
+        updateCurrentPage(pageEntry.bookId, pageEntry.pages)
     }
 
 

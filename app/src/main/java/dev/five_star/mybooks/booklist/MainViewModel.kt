@@ -4,21 +4,17 @@ import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.database.toBookItem
-import dev.five_star.mybooks.model.Book
-import dev.five_star.mybooks.model.ui_model.BookItem
+import dev.five_star.mybooks.data.Book
+import dev.five_star.mybooks.ui_common.ui_model.BookItem
 import dev.five_star.mybooks.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
 class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
-    private val _bookList: MutableLiveData<List<BookItem>> = MutableLiveData<List<BookItem>>()
     val bookList: LiveData<List<BookItem>> = repository.getAllBooks().mapLatest { it ->
         it.map { it.toBookItem() }
     }.asLiveData()
-
-    val testBookList = repository.getAllBooks().asLiveData()
-
 
     private val _navigateTo = MutableLiveData<NavDirections>()
     val navigateTo: LiveData<NavDirections> = _navigateTo
@@ -31,11 +27,6 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
     private val _dialogEffect = SingleLiveEvent<DialogEffect>()
     val dialogEffect: LiveData<DialogEffect> = _dialogEffect
-
-    init {
-//        getBookList()
-
-    }
 
 //    private fun getBookList() {
 //        val bookItemList: List<BookItem> = repository.getAllBooks().map { it.toBookItem() }
@@ -50,13 +41,10 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         if(bookTitle.isNotEmpty() && bookPages > 0) {
             // are there any differents?
             viewModelScope.launch {
-                val newBook = dev.five_star.mybooks.database.Book(
+                val newBook = dev.five_star.mybooks.database.BookEntry(
                     title = bookTitle,
                     pages = bookPages,
                 )
-
-                repository.addBook(newBook)
-                _dialogEffect.postValue(DialogEffect.CloseAddBook)
 
                 val entered = repository.addBook(newBook)
                 if (entered) {
