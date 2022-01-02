@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.navGraphViewModels
 import dev.five_star.mybooks.R
@@ -45,6 +46,16 @@ class AddBookDialog : DialogFragment() {
                 MainViewModel.DialogEffect.CloseAddBook -> dismiss()
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // This is a workaround for the issue that match_parent did not work from xml
+        // see: https://medium.com/@lovejjfg/android-dialog-layout-match-parent-not-work-789cd23bc0de
+        dialog?.window?.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onDestroyView() {
