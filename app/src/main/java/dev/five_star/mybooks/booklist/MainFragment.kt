@@ -23,13 +23,12 @@ class MainFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val bookAdapter = BookAdapter { bookId ->
-        //TODO use the id and get the book from db
-        viewModel.dataInput(Event.SelectItem(bookId))
-    }
-
     private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) {
         MainViewModelFactory(requireMyBookApplication().bookRepository)
+    }
+
+    private val bookAdapter = BookAdapter { bookId ->
+        viewModel.dataInput(Event.SelectItem(bookId))
     }
 
     override fun onCreateView(

@@ -21,7 +21,6 @@ class DetailsFragment : Fragment() {
     private val pagesEntryAdapter = PagesAdapter()
     private val args: DetailsFragmentArgs by navArgs()
 
-
     private val viewModel: DetailsViewModel by viewModels {
         DetailsViewModelFactory(args.bookId, requireMyBookApplication().bookRepository)
     }
@@ -43,14 +42,12 @@ class DetailsFragment : Fragment() {
             adapter = pagesEntryAdapter
         }
 
-        viewModel.bookDetails.observe(viewLifecycleOwner, { bookItem ->
+        viewModel.bookData.observe(viewLifecycleOwner, { bookItem ->
             binding.itemBook.bookTitle.text = bookItem.title
             binding.itemBook.bookPercentText.text = bookItem.percentText
             binding.itemBook.bookProgressBar.progress = bookItem.bookProcess
-        })
 
-        viewModel.pagesList.observe(viewLifecycleOwner, { pageList ->
-            pagesEntryAdapter.submitList(pageList)
+            pagesEntryAdapter.submitList(bookItem.bookmarkList)
         })
 
         viewModel.pageEntry.observe(viewLifecycleOwner, {

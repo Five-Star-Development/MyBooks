@@ -5,29 +5,26 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.five_star.mybooks.database.PageEntry
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
-import java.text.SimpleDateFormat
+import dev.five_star.mybooks.ui_common.PageBookmarkItem
 
-private object PagesDiffUtil : DiffUtil.ItemCallback<PageEntry>() {
-    override fun areItemsTheSame(oldItem: PageEntry, newItem: PageEntry): Boolean {
-        return oldItem == newItem //TODO compare the id as soon as we have a database
+private object PagesDiffUtil : DiffUtil.ItemCallback<PageBookmarkItem>() {
+    override fun areItemsTheSame(oldItem: PageBookmarkItem, newItem: PageBookmarkItem): Boolean {
+        return oldItem.date == newItem.date
     }
 
-    override fun areContentsTheSame(oldItem: PageEntry, newItem: PageEntry): Boolean {
+    override fun areContentsTheSame(oldItem: PageBookmarkItem, newItem: PageBookmarkItem): Boolean {
         return (oldItem == newItem)
     }
 }
 
-class PagesAdapter : ListAdapter<PageEntry, PagesAdapter.ViewHolder>(PagesDiffUtil) {
+class PagesAdapter : ListAdapter<PageBookmarkItem, PagesAdapter.ViewHolder>(PagesDiffUtil) {
 
     inner class ViewHolder(private val binding: ItemBookPageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindPagesEntry(entry: PageEntry) {
-            val pattern = "dd.MM.yyyy"
-            val simpleDateFormat = SimpleDateFormat(pattern)
-            binding.enteredDate.text = simpleDateFormat.format(entry.date)
-            binding.page.text = entry.pages.toString()
+        fun bindPagesEntry(entry: PageBookmarkItem) {
+            binding.enteredDate.text = entry.date
+            binding.page.text = entry.page.toString()
         }
     }
 
@@ -38,7 +35,7 @@ class PagesAdapter : ListAdapter<PageEntry, PagesAdapter.ViewHolder>(PagesDiffUt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val pagesEntry = getItem(position)
+        val pagesEntry: PageBookmarkItem = getItem(position)
         holder.bindPagesEntry(pagesEntry)
     }
 

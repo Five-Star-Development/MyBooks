@@ -1,17 +1,16 @@
 package dev.five_star.mybooks.data
 
-import dev.five_star.mybooks.database.PageEntry
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 interface BookRepository {
 
     fun getAllBooks(): Flow<List<Book>>
 
-    suspend fun getBook(id: Int): Book
+    fun getBook(id: Int): Flow<Book>
 
-    suspend fun addBook(book: Book) : Boolean
+    suspend fun addBook(title: String, pages: Int) : Boolean
 
-    //TODO refector this one too
-    suspend fun addPageEntry(pageEntry: PageEntry)
+    suspend fun addPageEntry(bookId: Int, date: Date, page: Int) : Boolean
 
 }
