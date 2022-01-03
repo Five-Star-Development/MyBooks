@@ -3,22 +3,18 @@ package dev.five_star.mybooks.booklist
 import androidx.lifecycle.*
 import androidx.navigation.NavDirections
 import dev.five_star.mybooks.data.BookRepository
-import dev.five_star.mybooks.database.toBookItem
-import dev.five_star.mybooks.model.Book
-import dev.five_star.mybooks.model.ui_model.BookItem
+import dev.five_star.mybooks.data.Book
+import dev.five_star.mybooks.ui_common.BookItem
+import dev.five_star.mybooks.ui_common.toItem
 import dev.five_star.mybooks.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
 class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
-    private val _bookList: MutableLiveData<List<BookItem>> = MutableLiveData<List<BookItem>>()
     val bookList: LiveData<List<BookItem>> = repository.getAllBooks().mapLatest { it ->
-        it.map { it.toBookItem() }
+        it.map { it.toItem() }
     }.asLiveData()
-
-    val testBookList = repository.getAllBooks().asLiveData()
-
 
     private val _navigateTo = MutableLiveData<NavDirections>()
     val navigateTo: LiveData<NavDirections> = _navigateTo
@@ -31,11 +27,6 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
     private val _dialogEffect = SingleLiveEvent<DialogEffect>()
     val dialogEffect: LiveData<DialogEffect> = _dialogEffect
-
-    init {
-//        getBookList()
-
-    }
 
 //    private fun getBookList() {
 //        val bookItemList: List<BookItem> = repository.getAllBooks().map { it.toBookItem() }
@@ -50,22 +41,16 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         if(bookTitle.isNotEmpty() && bookPages > 0) {
             // are there any differents?
             viewModelScope.launch {
-                val newBook = dev.five_star.mybooks.database.Book(
-                    title = bookTitle,
-                    pages = bookPages,
-                )
-
-                repository.addBook(newBook)
-                _dialogEffect.postValue(DialogEffect.CloseAddBook)
-
-                val entered = repository.addBook(newBook)
+                val entered = repository.addBook(title = bookTitle, pages = bookPages)
                 if (entered) {
                     _dialogEffect.postValue(DialogEffect.CloseAddBook)
+                } else {
+                    _dialogEffect.postValue(DialogEffect.InputError)
                 }
             }
 
         } else {
-            //TODO inform the user about the error
+            _dialogEffect.postValue(DialogEffect.InputError)
         }
     }
 
@@ -96,6 +81,7 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
     sealed class DialogEffect {
         object CloseAddBook : DialogEffect()
+        object InputError: DialogEffect()
     }
 }
 

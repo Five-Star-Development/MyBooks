@@ -5,26 +5,26 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.five_star.mybooks.model.PagesEntry
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
+import dev.five_star.mybooks.ui_common.PageBookmarkItem
 
-private object PagesDiffUtil : DiffUtil.ItemCallback<PagesEntry>() {
-    override fun areItemsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
-        return oldItem == newItem //TODO compare the id as soon as we have a database
+private object PagesDiffUtil : DiffUtil.ItemCallback<PageBookmarkItem>() {
+    override fun areItemsTheSame(oldItem: PageBookmarkItem, newItem: PageBookmarkItem): Boolean {
+        return oldItem.date == newItem.date
     }
 
-    override fun areContentsTheSame(oldItem: PagesEntry, newItem: PagesEntry): Boolean {
+    override fun areContentsTheSame(oldItem: PageBookmarkItem, newItem: PageBookmarkItem): Boolean {
         return (oldItem == newItem)
     }
 }
 
-class PagesAdapter : ListAdapter<PagesEntry, PagesAdapter.ViewHolder>(PagesDiffUtil) {
+class PagesAdapter : ListAdapter<PageBookmarkItem, PagesAdapter.ViewHolder>(PagesDiffUtil) {
 
     inner class ViewHolder(private val binding: ItemBookPageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindPagesEntry(entry: PagesEntry) {
+        fun bindPagesEntry(entry: PageBookmarkItem) {
             binding.enteredDate.text = entry.date
-            binding.page.text = entry.page
+            binding.page.text = entry.page.toString()
         }
     }
 
@@ -35,7 +35,7 @@ class PagesAdapter : ListAdapter<PagesEntry, PagesAdapter.ViewHolder>(PagesDiffU
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val pagesEntry = getItem(position)
+        val pagesEntry: PageBookmarkItem = getItem(position)
         holder.bindPagesEntry(pagesEntry)
     }
 

@@ -7,18 +7,29 @@ import kotlinx.coroutines.flow.Flow
 interface BookDao {
 
     @Query("SELECT * FROM book_table")
-    fun getAllBooks(): Flow<List<Book>>
+    fun getAllBooks(): Flow<List<BookEntry>>
 
-    @Query("SELECT * FROM book_table WHERE id = :bookId")
-    suspend fun getBook(bookId: Int) : Book
+    @Query(
+        "SELECT * FROM book_table " +
+                "LEFT JOIN pages_table ON book_table.id = pages_table.bookId"
+    )
+    fun getAllBooksWithPages(): Flow<Map<BookEntry, List<PageEntry>>>
+
+    @Query(
+        "SELECT * FROM book_table " +
+                "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
+                "WHERE book_table.id = :bookId "
+    )
+    fun getBook(bookId: Int): Flow<Map<BookEntry, List<PageEntry>>>
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertBook(book: Book) : Long
+    suspend fun insertBook(book: BookEntry): Long
 
     @Update
-    suspend fun updateBook(book: Book) : Int
+    suspend fun updateBook(book: BookEntry): Int
 
     @Delete
-    suspend fun deleteBook(book: Book) : Int
+    suspend fun deleteBook(book: BookEntry): Int
 
 }
