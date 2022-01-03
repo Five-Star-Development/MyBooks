@@ -7,4 +7,5 @@
     <string name="page">Page</string>
     <string name="enter">Enter</string>
     <string name="todays_page">Today\'s page:</string>
+    <string name="book_insert_error">Could not add book, pleas check input values</string>
 </resources>

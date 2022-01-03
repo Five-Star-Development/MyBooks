@@ -12,7 +12,7 @@ interface PagesDao {
     @Query("SELECT * FROM pages_table WHERE bookId = :bookId")
     fun getPagesForBook(bookId: Int): Flow<List<PageEntry>>
 
-    @Query("SELECT pages FROM pages_table WHERE bookId = :bookId ORDER BY pages DESC LIMIT 1")
+    @Query("SELECT page FROM pages_table WHERE bookId = :bookId ORDER BY page DESC LIMIT 1")
     suspend fun getLastPageForBook(bookId: Int): Int?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

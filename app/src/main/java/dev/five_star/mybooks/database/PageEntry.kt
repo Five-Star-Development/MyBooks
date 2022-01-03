@@ -6,8 +6,7 @@ import java.util.*
 
 @Entity(tableName = "pages_table")
 data class PageEntry(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val bookId: Int,
-    val date: Date,
-    val pages: Int
+    @PrimaryKey val date: Date,
+    val page: Int
 )

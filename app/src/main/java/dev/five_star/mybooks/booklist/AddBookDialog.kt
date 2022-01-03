@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.snackbar.Snackbar
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 import dev.five_star.mybooks.requireMyBookApplication
@@ -44,6 +46,7 @@ class AddBookDialog : DialogFragment() {
         viewModel.dialogEffect.observe(viewLifecycleOwner) {
             when(it) {
                 MainViewModel.DialogEffect.CloseAddBook -> dismiss()
+                MainViewModel.DialogEffect.InputError -> showErrorMessage()
             }
         }
     }
@@ -61,6 +64,11 @@ class AddBookDialog : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showErrorMessage() {
+        val errorMessage = Toast.makeText(context, R.string.book_insert_error, Toast.LENGTH_LONG)
+        errorMessage.show()
     }
 
 }
