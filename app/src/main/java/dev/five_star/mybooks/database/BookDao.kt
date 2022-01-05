@@ -10,13 +10,15 @@ interface BookDao {
     fun getAllBooks(): Flow<List<BookEntry>>
 
     @Query(
-        "SELECT * FROM book_table " +
+        "SELECT book_table.*, pages_table.id AS pagesId, pages_table.bookId, pages_table.date, pages_table.page " +
+                "FROM book_table " +
                 "LEFT JOIN pages_table ON book_table.id = pages_table.bookId"
     )
     fun getAllBooksWithPages(): Flow<Map<BookEntry, List<PageEntry>>>
 
     @Query(
-        "SELECT * FROM book_table " +
+        "SELECT book_table.*, pages_table.id AS pagesId, pages_table.bookId, pages_table.date, pages_table.page " +
+                "FROM book_table " +
                 "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
                 "WHERE book_table.id = :bookId "
     )

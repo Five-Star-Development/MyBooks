@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9bfc1b8b5e4426f1b2fdbc10d5f92420",
+    "identityHash": "a88ad9e9bddbe5f60b0ee56dc6a1a6a3",
     "entities": [
       {
         "tableName": "book_table",
@@ -38,8 +38,14 @@
       },
       {
         "tableName": "pages_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` INTEGER NOT NULL, `date` INTEGER NOT NULL, `page` INTEGER NOT NULL, PRIMARY KEY(`date`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookId` INTEGER NOT NULL, `date` INTEGER NOT NULL, `page` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "bookId",
             "columnName": "bookId",
@@ -61,9 +67,9 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "date"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -72,7 +78,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9bfc1b8b5e4426f1b2fdbc10d5f92420')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a88ad9e9bddbe5f60b0ee56dc6a1a6a3')"
     ]
   }
 }

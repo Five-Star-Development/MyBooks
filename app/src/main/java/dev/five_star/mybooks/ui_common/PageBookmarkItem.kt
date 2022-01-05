@@ -7,7 +7,10 @@ import java.text.SimpleDateFormat
 data class PageBookmarkItem(val date: String, val page: Int)
 
 fun PageBookmark.toItem(): PageBookmarkItem {
-    val dateText = if (DateUtils.isToday(date.time)) {
+    val dateText = if(date == null) {
+        ""
+    }
+    else if (DateUtils.isToday(date.time)) {
         "Today"
     } else {
         val pattern = "dd.MM.yyyy"
