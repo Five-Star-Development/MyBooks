@@ -7,6 +7,7 @@ import dev.five_star.mybooks.roundOffDecimal
 data class BookItem(
     val id: Int,
     val title: String,
+    val totalPages: Int,
     val currentPage: Int,
     val percentText: String,
     val bookProcess: Int,
@@ -34,6 +35,7 @@ fun Book.toItem(): BookItem {
     return BookItem(
         id,
         title,
+        pages,
         lastPage,
         "${roundOffDecimal(percent)} %",
         percent.toInt(),

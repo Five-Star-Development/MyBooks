@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@boe-dev 
-Five-Star-Development
-/
-MyBooks
-1
-0
-0
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-MyBooks/.gitignore
-@boe-dev
-boe-dev Initial commit
-Latest commit 9b98bad now
- History
- 1 contributor
-85 lines (68 sloc)  1.4 KB
-  
 # Built application files
 *.apk
 *.aar

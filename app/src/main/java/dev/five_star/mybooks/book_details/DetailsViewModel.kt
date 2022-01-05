@@ -14,10 +14,6 @@ import java.util.*
 class DetailsViewModel(private val bookId: Int, private val repository: BookRepository) :
     ViewModel() {
 
-//    private var _bookDetails: MutableLiveData<BookItem> = MutableLiveData()
-//    val bookDetails: LiveData<BookItem> = _bookDetails
-
-    //    val pagesList: LiveData<List<PageEntry>> = repository.getBook(bookId).asLiveData()
     val bookData: LiveData<BookItem> = repository.getBook(bookId).mapLatest { book ->
         book.toItem()
     }.asLiveData()
@@ -26,8 +22,13 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
     val pageEntry: LiveData<CharSequence> = _pageEntry
 
     private fun pagesValid(enteredPage: String): Boolean {
+        //TODO: check this cases ->
+        //if (bookData.value!!.currentPage < enteredPage.toInt())
+        //if (enteredPage.toInt() < bookData.value!!.totalPages)
+        //if (enteredPage.toInt() == bookData.value!!.totalPages)
         return if (bookData.value != null) {
             (bookData.value!!.currentPage < enteredPage.toInt())
+                    && (enteredPage.toInt() <= bookData.value!!.totalPages)
         } else {
             false
         }
@@ -47,7 +48,8 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
             if (pagesValid(enteredPage)) {
                 val page = enteredPage.toInt()
                 viewModelScope.launch {
-                    val result = repository.addPageEntry(bookId = bookId, date = Date(), page = page)
+                    val result =
+                        repository.addPageEntry(bookId = bookId, date = Date(), page = page)
                     if (result) {
                         _pageEntry.postValue("")
                     }
