@@ -10,7 +10,7 @@ import dev.five_star.mybooks.ui_common.BookItem
 
 private object BookDiffUtil : DiffUtil.ItemCallback<BookItem>() {
     override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
-        return oldItem == newItem //TODO compare the id as soon as we have a database
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {

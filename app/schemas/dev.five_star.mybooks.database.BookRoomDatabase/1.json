@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a88ad9e9bddbe5f60b0ee56dc6a1a6a3",
+    "identityHash": "2bbeea625af08fd3accc986d562fb7c6",
     "entities": [
       {
         "tableName": "book_table",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "pages_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookId` INTEGER NOT NULL, `date` INTEGER NOT NULL, `page` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookId` INTEGER NOT NULL, `date` INTEGER, `page` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -56,7 +56,7 @@
             "fieldPath": "date",
             "columnName": "date",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "page",
@@ -78,7 +78,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a88ad9e9bddbe5f60b0ee56dc6a1a6a3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2bbeea625af08fd3accc986d562fb7c6')"
     ]
   }
 }
