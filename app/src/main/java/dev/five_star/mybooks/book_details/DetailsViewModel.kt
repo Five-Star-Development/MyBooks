@@ -22,6 +22,10 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
     val pageEntry: LiveData<CharSequence> = _pageEntry
 
     private fun pagesValid(enteredPage: String): Boolean {
+        //TODO: check this cases ->
+        //if (bookData.value!!.currentPage < enteredPage.toInt())
+        //if (enteredPage.toInt() < bookData.value!!.totalPages)
+        //if (enteredPage.toInt() == bookData.value!!.totalPages)
         return if (bookData.value != null) {
             (bookData.value!!.currentPage < enteredPage.toInt())
                     && (enteredPage.toInt() <= bookData.value!!.totalPages)
