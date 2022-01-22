@@ -1,29 +1,30 @@
 package dev.five_star.mybooks.booklist
 
+import dev.five_star.mybooks.data.Book
 import dev.five_star.mybooks.data.BookRepository
-import dev.five_star.mybooks.database.Book
-import dev.five_star.mybooks.model.PagesEntry
+import dev.five_star.mybooks.database.PageEntry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.util.*
 
 class MockedBookRepo : BookRepository {
 
     private val bookList = mutableListOf(
-        Book(1,"Book Number 1", 300, 3),
-        Book(2, "Book Number 2", 300, 30),
-        Book(3,"Book Number 3", 300, 233),
-        Book(4,"Book Number 4", 300, 113),
-        Book(5,"Book Number 5", 300, 299),
-        Book(6,"Book Number 6", 300, 300),
-        Book(7,"Book Number 7", 300, 100),
+        Book(1,"Book Number 1", 300),
+        Book(2, "Book Number 2", 300, emptyList()),
+        Book(3,"Book Number 3", 300, emptyList()),
+        Book(4,"Book Number 4", 300, emptyList()),
+        Book(5,"Book Number 5", 300, emptyList()),
+        Book(6,"Book Number 6", 300, emptyList()),
+        Book(7,"Book Number 7", 300, emptyList()),
     )
 
     private val pageList = mutableListOf(
-        PagesEntry("13.03.2021", "13"),
-        PagesEntry("14.03.2021", "35"),
-        PagesEntry("15.03.2021", "67"),
-        PagesEntry("16.03.2021", "89"),
-        PagesEntry("17.03.2021", "111"),
+        PageEntry(bookId = 1, date = Date(), page = 13),
+        PageEntry(bookId = 1, date = Date(), page = 35),
+        PageEntry(bookId = 1, date = Date(), page = 67),
+        PageEntry(bookId = 1, date = Date(), page = 89),
+        PageEntry(bookId = 1, date = Date(), page = 111),
     )
 
     override fun getAllBooks(): Flow<List<Book>> {
@@ -32,23 +33,16 @@ class MockedBookRepo : BookRepository {
         }
     }
 
-    override suspend fun getBook(id: Int): Book {
-        return Book(1, "title", 100, 10)
+    override fun getBook(id: Int): Flow<Book> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun addBook(book: Book): Boolean {
-        return bookList.add(book)
+    override suspend fun addBook(title: String, pages: Int): Boolean {
+        return bookList.add(Book(8, title, pages))
     }
 
-    override fun getPagesForBook(book: Book): List<PagesEntry> {
-        return pageList
+    override suspend fun addPageEntry(bookId: Int, date: Date, page: Int): Boolean {
+        return pageList.add(PageEntry(bookId = bookId, date = date, page = page))
     }
 
-    override fun getPagesForBook(bookId: Int): List<PagesEntry> {
-        return pageList
-    }
-
-    override fun addPageEntry(enteredPage: String) {
-        //
-    }
 }

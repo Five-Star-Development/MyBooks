@@ -10,19 +10,19 @@ interface BookDao {
     fun getAllBooks(): Flow<List<BookEntry>>
 
     @Query(
-        "SELECT book_table.*, pages_table.id AS pagesId, pages_table.bookId, pages_table.date, pages_table.page " +
+        "SELECT * " +
                 "FROM book_table " +
                 "LEFT JOIN pages_table ON book_table.id = pages_table.bookId"
     )
-    fun getAllBooksWithPages(): Flow<Map<BookEntry, List<PageEntry>>>
+    fun getAllBooksWithPages(): Flow<BookRepositoryResponse>
 
     @Query(
-        "SELECT book_table.*, pages_table.id AS pagesId, pages_table.bookId, pages_table.date, pages_table.page " +
+        "SELECT * " +
                 "FROM book_table " +
                 "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
                 "WHERE book_table.id = :bookId "
     )
-    fun getBook(bookId: Int): Flow<Map<BookEntry, List<PageEntry>>>
+    fun getBookWithPages(bookId: Int): Flow<BookRepositoryResponse>
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -35,3 +35,5 @@ interface BookDao {
     suspend fun deleteBook(book: BookEntry): Int
 
 }
+
+public typealias BookRepositoryResponse = Map<BookEntry, List<PageEntry>>
