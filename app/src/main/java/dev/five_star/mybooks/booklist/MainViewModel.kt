@@ -56,7 +56,7 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
     fun dataInput(event: Event) = when(event) {
         Event.ShowAddBook -> {
-            _effects.postValue(Effect.AddBook)
+            _effects.postValue(Effect.BookAdded)
         }
         is Event.SelectItem -> {
             openBookDetails(event.bookId)
@@ -65,6 +65,7 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
             val bookTitle = event.bookTitleInput.trim()
             val bookPages: Int = if (event.bookPagesInput.isEmpty()) 0 else event.bookPagesInput.toInt()
             addBook(bookTitle, bookPages)
+            //TODO add a error case/state here
         }
     }
 
@@ -76,7 +77,7 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
 
     sealed class Effect {
         data class ShowDetails(val bookId: Int) : Effect()
-        object AddBook : Effect()
+        object BookAdded : Effect()
     }
 
     sealed class DialogEffect {

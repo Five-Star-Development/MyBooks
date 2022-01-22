@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2bbeea625af08fd3accc986d562fb7c6",
+    "identityHash": "9e6b2607ef3e296145d390ac5515e443",
     "entities": [
       {
         "tableName": "book_table",
@@ -38,11 +38,11 @@
       },
       {
         "tableName": "pages_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookId` INTEGER NOT NULL, `date` INTEGER, `page` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`page_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bookId` INTEGER NOT NULL, `date` INTEGER NOT NULL, `page` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
-            "columnName": "id",
+            "columnName": "page_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -56,7 +56,7 @@
             "fieldPath": "date",
             "columnName": "date",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "page",
@@ -67,7 +67,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "page_id"
           ],
           "autoGenerate": true
         },
@@ -78,7 +78,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2bbeea625af08fd3accc986d562fb7c6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9e6b2607ef3e296145d390ac5515e443')"
     ]
   }
 }
