@@ -1,9 +1,11 @@
 package dev.five_star.mybooks.book_details
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -14,6 +16,7 @@ import dev.five_star.mybooks.requireMyBookApplication
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -55,7 +58,13 @@ class DetailsFragment : Fragment() {
         })
 
         binding.pagesEntry.setOnKeyListener { view, keyCode, keyEvent ->
-            return@setOnKeyListener viewModel.verifyEnter(view, keyEvent, keyCode)
+            if (view is TextView
+                && (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)) {
+                viewModel.verifyEnter(view.text?.toString())
+                false
+            } else {
+                false
+            }
         }
     }
 
