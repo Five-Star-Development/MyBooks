@@ -1,9 +1,11 @@
-package dev.five_star.mybooks
+package dev.five_star.mybooks.utils
 
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.*
+
+
 
 fun Int.divideToPercent(divideTo: Int): Double {
     return if (divideTo == 0) 0.0
@@ -15,7 +17,5 @@ fun roundOffDecimal(number: Double): Double {
 }
 
 fun Date.uiFormat() : String {
-    val pattern = "dd.MM.yyyy"
-    val simpleDateFormat = SimpleDateFormat(pattern)
-    return simpleDateFormat.format(this)
+    return  DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(this)
 }

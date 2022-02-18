@@ -10,7 +10,7 @@ import dev.five_star.mybooks.database.BookRoomDatabase
 
 class MyBookApplication : Application() {
 
-    val database by lazy {
+    private val database by lazy {
         Room.databaseBuilder(
             this,
             BookRoomDatabase::class.java,
