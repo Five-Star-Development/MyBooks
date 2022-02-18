@@ -5,10 +5,10 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
 }
+apply plugin: 'kotlin-android'
 
 android {
     compileSdk 31
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "dev.five_star.mybooks"
@@ -42,6 +42,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+//    packagingOptions {
+//        resources.merges.add("META-INF/AL2.0")
+//        resources.merges.add("META-INF/LGPL2.1")
+//    }
 }
 
 dependencies {
@@ -75,8 +80,13 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$rootProject.archTestingVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutines"
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.archTestingVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutines"
+
+    androidTestImplementation "androidx.test:runner:1.4.0"
+    androidTestImplementation "androidx.test:rules:1.4.0"
+//    implementation "androidx.core:core-ktx:+"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
