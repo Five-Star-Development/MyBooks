@@ -34,7 +34,9 @@ class MockedBookRepo : BookRepository {
     }
 
     override fun getBook(id: Int): Flow<Book> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(bookList[id])
+        }
     }
 
     override suspend fun addBook(title: String, pages: Int): Boolean {

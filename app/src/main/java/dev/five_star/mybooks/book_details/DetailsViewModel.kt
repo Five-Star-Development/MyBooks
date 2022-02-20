@@ -1,6 +1,7 @@
 package dev.five_star.mybooks.book_details
 
 import androidx.lifecycle.*
+import dev.five_star.mybooks.R
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
@@ -21,15 +22,14 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
     private var _pageEntry: MutableLiveData<CharSequence> = MutableLiveData()
     val pageEntry: LiveData<CharSequence> = _pageEntry
 
+    private var _errorMessage: MutableLiveData<Int> = MutableLiveData()
+    val errorMessage: LiveData<Int> = _errorMessage
+
     @OptIn(ExperimentalContracts::class)
     private fun pagesValid(enteredPage: String?): Boolean {
         contract {
             returns(true) implies (enteredPage != null)
         }
-        //TODO: check this cases ->
-        //if (bookData.value!!.currentPage < enteredPage.toInt())
-        //if (enteredPage.toInt() < bookData.value!!.totalPages)
-        //if (enteredPage.toInt() == bookData.value!!.totalPages)
         return if (bookData.value != null && !enteredPage.isNullOrBlank()) {
             (bookData.value!!.currentPage < enteredPage.toInt())
                     && (enteredPage.toInt() <= bookData.value!!.totalPages)
@@ -47,8 +47,9 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
                 if (result) {
                     _pageEntry.postValue("")
                 }
+            } else {
+                _errorMessage.postValue(R.string.invalid_page_entery)
             }
-            //TODO: else with output for the user why input is not valid
         }
         return true
     }

@@ -2,8 +2,8 @@ package dev.five_star.mybooks.booklist
 
 import androidx.lifecycle.*
 import androidx.navigation.NavDirections
-import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.data.Book
+import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
 import dev.five_star.mybooks.utils.SingleLiveEvent
@@ -65,7 +65,6 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
             val bookTitle = event.bookTitleInput.trim()
             val bookPages: Int = if (event.bookPagesInput.isEmpty()) 0 else event.bookPagesInput.toInt()
             addBook(bookTitle, bookPages)
-            //TODO add a error case/state here
         }
     }
 

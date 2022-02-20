@@ -9,16 +9,12 @@ import dev.five_star.mybooks.utils.uiFormat
 data class PageBookmarkItem(val date: DateViewItem, val page: Int)
 
 sealed class DateViewItem {
-    data class FormattedDate(val text: String = "") : DateViewItem()
+    data class FormattedDate(val text: String) : DateViewItem()
     data class Reference(@StringRes val res: Int) : DateViewItem()
 }
 
 fun PageBookmark.toItem(): PageBookmarkItem {
     val dateViewItem = when {
-        //TODO check if this can still happen
-        date == null -> {
-            DateViewItem.FormattedDate()
-        }
         DateUtils.isToday(date.time) -> {
             DateViewItem.Reference(R.string.today)
         }
