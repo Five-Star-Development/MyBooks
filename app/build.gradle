@@ -32,7 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
     compileOptions {
@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    //https://github.com/jmfayard/refreshVersions/tree/main/plugins/dependencies/src/main/kotlin/dependencies
+
     implementation AndroidX.lifecycle.process
 
     implementation AndroidX.core.ktx
