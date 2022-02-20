@@ -1,8 +1,8 @@
 package dev.five_star.mybooks.ui_common
 
 import dev.five_star.mybooks.data.Book
-import dev.five_star.mybooks.divideToPercent
-import dev.five_star.mybooks.roundOffDecimal
+import dev.five_star.mybooks.utils.divideToPercent
+import dev.five_star.mybooks.utils.roundOffDecimal
 
 data class BookItem(
     val id: Int,

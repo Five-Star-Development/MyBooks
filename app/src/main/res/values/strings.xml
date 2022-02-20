@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyBooks</string>
+    <string name="app_name" translatable="false">MyBooks</string>
     <string name="desc_add_new_book">Add new book</string>
     <string name="book_title">Book title</string>
     <string name="pages_of_the_book">Pages of the Book</string>
@@ -7,5 +7,7 @@
     <string name="page">Page</string>
     <string name="enter">Enter</string>
     <string name="todays_page">Today\'s page:</string>
-    <string name="book_insert_error">Could not add book, pleas check input values</string>
+    <string name="book_insert_error">Could not add book, please check input values</string>
+    <string name="today">Today</string>
+    <string name="invalid_page_entery">The amount of pages that you tried to add is not valid, please check your input</string>
 </resources>

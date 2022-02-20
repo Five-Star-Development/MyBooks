@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.five_star.mybooks.databinding.ItemBookPageBinding
+import dev.five_star.mybooks.ui_common.DateViewItem
 import dev.five_star.mybooks.ui_common.PageBookmarkItem
 
 private object PagesDiffUtil : DiffUtil.ItemCallback<PageBookmarkItem>() {
@@ -23,7 +24,15 @@ class PagesAdapter : ListAdapter<PageBookmarkItem, PagesAdapter.ViewHolder>(Page
     inner class ViewHolder(private val binding: ItemBookPageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindPagesEntry(entry: PageBookmarkItem) {
-            binding.enteredDate.text = entry.date
+            val dateText = when(entry.date) {
+                is DateViewItem.Reference -> {
+                    itemView.context.getString(entry.date.res)
+                }
+                is DateViewItem.FormattedDate -> {
+                    entry.date.text
+                }
+            }
+            binding.enteredDate.text = dateText
             binding.page.text = entry.page.toString()
         }
     }

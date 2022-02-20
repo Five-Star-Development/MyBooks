@@ -37,11 +37,12 @@ class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: Pag
         return result > 0
     }
 
-    private fun BookRepositoryResponse.toBook() : List<Book> {
-        return map { item ->
-            item.key.toBook(item.value.map { bookmark ->
-                bookmark.toPageBookmark()
-            })
-        }
+}
+
+fun BookRepositoryResponse.toBook() : List<Book> {
+    return map { item ->
+        item.key.toBook(item.value.map { bookmark ->
+            bookmark.toPageBookmark()
+        })
     }
 }
