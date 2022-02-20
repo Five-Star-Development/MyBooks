@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="desc_add_new_book">neues Buch hinzufügen</string>
+    <string name="book_title">Buch Titel</string>
+    <string name="pages_of_the_book">Anzahl der Seiten</string>
+    <string name="add_book">Buch hinzufügen</string>
+    <string name="page">Seite</string>
+    <string name="enter">Enter</string>
+    <string name="todays_page">Heutige Seite:</string>
+    <string name="book_insert_error">Buch konnte nicht hinzugefügt werden, bitte prüfe die Eingaben</string>
     <string name="today">Heute</string>
+    <string name="invalid_page_entery">Die Anzahl der Seiten ist unzulässig, bitte prüfe die Eingeben</string>
 </resources>
