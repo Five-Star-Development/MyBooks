@@ -50,14 +50,13 @@ android {
 }
 
 dependencies {
-    //https://github.com/jmfayard/refreshVersions/tree/main/plugins/dependencies/src/main/kotlin/dependencies
-
-    implementation AndroidX.lifecycle.process
+    // https://github.com/jmfayard/refreshVersions/tree/main/plugins/dependencies/src/main/kotlin/dependencies
 
     implementation AndroidX.core.ktx
     implementation AndroidX.appCompat
-    implementation Google.android.material
     implementation AndroidX.constraintLayout
+
+    implementation Google.android.material
 
     //Jetpack Navigation
     implementation(AndroidX.navigation.fragmentKtx)
@@ -65,7 +64,6 @@ dependencies {
 
     // Room components
     implementation AndroidX.room.ktx
-
     kapt AndroidX.room.compiler
     androidTestImplementation AndroidX.room.testing
 
@@ -73,22 +71,23 @@ dependencies {
     implementation AndroidX.lifecycle.viewModelKtx
     implementation AndroidX.lifecycle.liveDataKtx
     implementation AndroidX.lifecycle.commonJava8
+    implementation AndroidX.lifecycle.process
 
     // Kotlin components
     api KotlinX.coroutines.core
     api KotlinX.coroutines.android
 
     testImplementation Testing.junit4
-    testImplementation AndroidX.archCore.testing
+
+    // Coroutines Text
     testImplementation KotlinX.coroutines.test
+    androidTestImplementation KotlinX.coroutines.test
+
+    testImplementation AndroidX.archCore.testing
+    androidTestImplementation AndroidX.archCore.testing
 
     androidTestImplementation AndroidX.test.ext.junit
     androidTestImplementation AndroidX.test.espresso.core
-    androidTestImplementation AndroidX.archCore.testing
-    androidTestImplementation KotlinX.coroutines.test
-
     androidTestImplementation AndroidX.test.runner
     androidTestImplementation AndroidX.test.rules
-//    implementation "androidx.core:core-ktx:+"
-//    implementation Kotlin.stdlib.jdk7
 }
