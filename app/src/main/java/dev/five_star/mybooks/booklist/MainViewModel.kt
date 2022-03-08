@@ -1,8 +1,9 @@
 package dev.five_star.mybooks.booklist
 
-import androidx.lifecycle.*
-import androidx.navigation.NavDirections
-import dev.five_star.mybooks.data.Book
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
@@ -16,12 +17,6 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         it.map { it.toItem() }
     }.asLiveData()
 
-    private val _navigateTo = MutableLiveData<NavDirections>()
-    val navigateTo: LiveData<NavDirections> = _navigateTo
-
-    private val _openBook = MutableLiveData<Book>()
-    val openBook: LiveData<Book> = _openBook
-
     private val _effects = SingleLiveEvent<Effect>()
     val effect: LiveData<Effect> = _effects
 
@@ -34,7 +29,8 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
 //    }
 
     private fun openBookDetails(bookId: Int) {
-        _effects.postValue(Effect.ShowDetails(bookId))
+        val action = Action.ShowDetails(bookId)
+        _effects.postValue(Effect.Navigate(action))
     }
 
     private fun addBook(bookTitle: String,  bookPages: Int) {
@@ -54,9 +50,25 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
         }
     }
 
+    private fun archiveBook(bookId: Int) {
+        viewModelScope.launch {
+            val archiveBookId = repository.archiveBook(bookId)
+            if (archiveBookId < 0) {
+                _effects.postValue(Effect.UndoMessage(archiveBookId))
+            }
+        }
+    }
+
+    private fun activateBook(bookId: Int) {
+        viewModelScope.launch {
+            repository.activateBook(bookId)
+        }
+    }
+
     fun dataInput(event: Event) = when(event) {
         Event.ShowAddBook -> {
-            _effects.postValue(Effect.BookAdded)
+            val action = Action.BookAdded
+            _effects.postValue(Effect.Navigate(action))
         }
         is Event.SelectItem -> {
             openBookDetails(event.bookId)
@@ -66,17 +78,30 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
             val bookPages: Int = if (event.bookPagesInput.isEmpty()) 0 else event.bookPagesInput.toInt()
             addBook(bookTitle, bookPages)
         }
+        is Event.ArchiveBook -> {
+            archiveBook(event.bookId)
+        }
+        is Event.ActivateBook -> {
+            activateBook(event.bookId)
+        }
     }
 
     sealed class Event {
         object ShowAddBook : Event()
         data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Event()
+        data class ArchiveBook(val bookId: Int) : Event()
+        data class ActivateBook(val bookId: Int) : Event()
         data class SelectItem(val bookId: Int) : Event()
     }
 
     sealed class Effect {
-        data class ShowDetails(val bookId: Int) : Effect()
-        object BookAdded : Effect()
+        data class UndoMessage(val bookId: Int) : Effect()
+        data class Navigate(val action: Action) : Effect()
+    }
+
+    sealed class Action {
+        data class ShowDetails(val bookId: Int) : Action()
+        object BookAdded : Action()
     }
 
     sealed class DialogEffect {

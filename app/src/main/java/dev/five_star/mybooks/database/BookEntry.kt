@@ -9,4 +9,5 @@ data class BookEntry(
     var id: Int = 0,
     val title: String,
     val pages: Int,
+    var archived: Boolean = false
 )

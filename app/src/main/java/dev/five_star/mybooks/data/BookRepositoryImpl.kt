@@ -25,6 +25,19 @@ class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: Pag
         return book
     }
 
+    override suspend fun archiveBook(bookId: Int): Int {
+        val book = bookDao.getBook(bookId)
+        book.archived = true
+        val result = bookDao.updateBook(book)
+        return if (result > 0) bookId else 0
+    }
+
+    override suspend fun activateBook(bookId: Int) {
+        val book = bookDao.getBook(bookId)
+        book.archived = false
+        bookDao.updateBook(book)
+    }
+
     override suspend fun addBook(title: String, pages: Int): Boolean {
         val book = BookEntry(title = title, pages = pages)
         val result = bookDao.insertBook(book)

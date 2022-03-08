@@ -9,6 +9,8 @@ import java.util.*
 
 class MockedBookRepo : BookRepository {
 
+    var archiveBook: Book? = null
+
     private val bookList = mutableListOf(
         Book(1,"Book Number 1", 300),
         Book(2, "Book Number 2", 300, emptyList()),
@@ -41,6 +43,17 @@ class MockedBookRepo : BookRepository {
 
     override suspend fun addBook(title: String, pages: Int): Boolean {
         return bookList.add(Book(8, title, pages))
+    }
+
+    override suspend fun archiveBook(bookId: Int): Int {
+        archiveBook = bookList[bookId]
+        return if (bookList.remove(archiveBook)) bookId else 0
+    }
+
+    override suspend fun activateBook(bookId: Int) {
+        archiveBook?.let {
+            bookList.add(it)
+        }
     }
 
     override suspend fun addPageEntry(bookId: Int, date: Date, page: Int): Boolean {
