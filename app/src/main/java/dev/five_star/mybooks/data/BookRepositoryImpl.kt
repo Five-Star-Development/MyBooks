@@ -26,15 +26,13 @@ class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: Pag
     }
 
     override suspend fun archiveBook(bookId: Int): Int {
-        val book = bookDao.getBook(bookId)
-        book.archived = true
+        val book = bookDao.getBook(bookId).copy(archived = true)
         val result = bookDao.updateBook(book)
         return if (result > 0) bookId else 0
     }
 
     override suspend fun activateBook(bookId: Int) {
-        val book = bookDao.getBook(bookId)
-        book.archived = false
+        val book = bookDao.getBook(bookId).copy(archived = false)
         bookDao.updateBook(book)
     }
 
