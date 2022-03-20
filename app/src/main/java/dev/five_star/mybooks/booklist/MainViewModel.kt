@@ -8,11 +8,12 @@ import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
 import dev.five_star.mybooks.utils.SingleLiveEvent
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
-class MainViewModel(private var repository: BookRepository) : ViewModel() {
+class MainViewModel(private var repository: BookRepository, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
 
     val bookList: LiveData<List<BookItem>> = repository.getAllBooks().mapLatest { it ->
         it.map { it.toItem() }
@@ -52,7 +53,7 @@ class MainViewModel(private var repository: BookRepository) : ViewModel() {
     }
 
     private fun archiveBook(bookId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val archiveBookId = repository.archiveBook(bookId)
             if (archiveBookId > 0) {
                 _effects.postValue(Effect.UndoMessage(archiveBookId))
