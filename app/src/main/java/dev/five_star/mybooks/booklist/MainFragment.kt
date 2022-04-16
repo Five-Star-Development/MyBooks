@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.booklist.MainViewModel.Event
 import dev.five_star.mybooks.databinding.FragmentMainBinding
@@ -57,17 +60,30 @@ class MainFragment : Fragment() {
         }
 
         viewModel.effect.observe(viewLifecycleOwner) { effect ->
-            val action = when(effect) {
-                is MainViewModel.Effect.ShowDetails -> {
-                    val bookId = effect.bookId
-                    MainFragmentDirections.actionMainFragmentToDetailsFragment(bookId)
+            when(effect) {
+                is MainViewModel.Effect.UndoMessage -> {
+                    Snackbar
+                        .make(binding.bookList, getString(R.string.book_archived), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.undo)) {
+                            viewModel.dataInput(Event.ActivateBook(effect.bookId))
+                        }
+                        .show()
                 }
-                MainViewModel.Effect.BookAdded -> {
-                   MainFragmentDirections.actionMainFragmentToAddBookDialog()
+                is MainViewModel.Effect.Navigate -> {
+                    val action = when (effect.action) {
+                        is MainViewModel.Action.ShowDetails -> {
+                            val bookId = effect.action.bookId
+                            MainFragmentDirections.actionMainFragmentToDetailsFragment(bookId)
+                        }
+                        MainViewModel.Action.BookAdded -> {
+                            MainFragmentDirections.actionMainFragmentToAddBookDialog()
+                        }
+                    }
+                    findNavController().navigate(action)
                 }
             }
-            findNavController().navigate(action)
         }
+        setSwipeToDelete()
     }
 
     override fun onResume() {
@@ -78,5 +94,20 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setSwipeToDelete() {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder) = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val bookId = bookAdapter.getBookId(viewHolder.adapterPosition)
+                viewModel.dataInput(Event.ArchiveBook(bookId))
+            }
+
+        }).attachToRecyclerView(binding.bookList)
     }
 }

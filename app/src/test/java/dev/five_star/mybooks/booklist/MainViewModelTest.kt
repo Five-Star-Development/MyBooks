@@ -4,7 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import dev.five_star.mybooks.MainCoroutineRule
 import dev.five_star.mybooks.data.BookRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -21,7 +22,6 @@ class MainViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
@@ -31,14 +31,34 @@ class MainViewModelTest {
     @Before
     fun testSetup() {
         testBookRepo = MockedBookRepo()
-        testMainViewModel = MainViewModel(testBookRepo)
+        testMainViewModel = MainViewModel(testBookRepo, mainCoroutineRule.dispatcher)
     }
 
     @Test
     fun `show add book dialog`() {
         testMainViewModel.dataInput(MainViewModel.Event.ShowAddBook)
         val mostRecentEffect = testMainViewModel.effect.value
-        assertThat(mostRecentEffect, `is` (MainViewModel.Effect.BookAdded))
+        if (mostRecentEffect is MainViewModel.Effect.Navigate) {
+            assertThat(mostRecentEffect.action, `is` (MainViewModel.Action.BookAdded))
+        }
+    }
+
+    @Test
+    fun `fail by adding empty book title`() {
+        val bookTitle = ""
+        val bookPages = "77"
+        val addBookEvent = MainViewModel.Event.AddBook(bookTitle, bookPages)
+        testMainViewModel.dataInput(addBookEvent)
+        assertThat(testMainViewModel.dialogEffect.value, `is` (MainViewModel.DialogEffect.InputError))
+    }
+
+    @Test
+    fun `fail by adding 0 pages`() {
+        val bookTitle = "my_book_title"
+        val bookPages = "0"
+        val addBookEvent = MainViewModel.Event.AddBook(bookTitle, bookPages)
+        testMainViewModel.dataInput(addBookEvent)
+        assertThat(testMainViewModel.dialogEffect.value, `is` (MainViewModel.DialogEffect.InputError))
     }
 
     @Test
@@ -46,9 +66,14 @@ class MainViewModelTest {
         val testBookId = 1
         testMainViewModel.dataInput(MainViewModel.Event.SelectItem(testBookId))
         val effect = testMainViewModel.effect.value
-        if (effect is MainViewModel.Effect.ShowDetails) {
-            assert(effect.bookId == testBookId) {
-                "error message here"
+        if (effect is MainViewModel.Effect.Navigate) {
+            val action = effect.action
+            if (action is MainViewModel.Action.ShowDetails) {
+                assert(action.bookId == testBookId) {
+                    "error message here"
+                }
+            } else {
+                assert(false)
             }
         } else {
             assert(false)
@@ -56,12 +81,51 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `add correct book`() = runBlockingTest {
+    fun `add correct book`() = runTest {
         val bookTitle = "my_book_title"
-        val bookPages = "99"
+        val bookPages = "77"
         val addBookEvent = MainViewModel.Event.AddBook(bookTitle, bookPages)
         testMainViewModel.dataInput(addBookEvent)
         assertThat(testMainViewModel.dialogEffect.value, `is` (MainViewModel.DialogEffect.CloseAddBook))
+    }
+
+    @Test
+    fun `archive book`() = runTest {
+        val books = testBookRepo.getAllBooks().first()
+        val book = books[0]
+        val archiveEvent = MainViewModel.Event.ArchiveBook(book.id)
+        testMainViewModel.dataInput(archiveEvent)
+        val newBooks = testBookRepo.getAllBooks().first()
+        assert(!newBooks.contains(book))
+    }
+
+    @Test
+    fun `activate archived book`() = runTest {
+        val books = testBookRepo.getAllBooks().first()
+        val book = books[0]
+        val archiveEvent = MainViewModel.Event.ArchiveBook(book.id)
+        testMainViewModel.dataInput(archiveEvent)
+        val booksWithArchived = testBookRepo.getAllBooks().first()
+        assert(!booksWithArchived.contains(book))
+
+        val activateEvent = MainViewModel.Event.ActivateBook(book.id)
+        testMainViewModel.dataInput(activateEvent)
+        val booksWithActivated = testBookRepo.getAllBooks().first()
+        assert(booksWithActivated.contains(book))
+    }
+
+    @Test
+    fun `notify undo message`() = runTest {
+        val bookId = 2
+        val archiveBookEvent = MainViewModel.Event.ArchiveBook(bookId)
+        testMainViewModel.dataInput(archiveBookEvent)
+        val effect = testMainViewModel.effect.value
+        if (effect is MainViewModel.Effect.UndoMessage) {
+            assert(effect.bookId == bookId)
+        } else {
+            assert(false)
+        }
+
     }
 
 }

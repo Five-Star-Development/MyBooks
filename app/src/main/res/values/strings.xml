@@ -10,4 +10,6 @@
     <string name="book_insert_error">Could not add book, please check input values</string>
     <string name="today">Today</string>
     <string name="invalid_page_entery">The amount of pages that you tried to add is not valid, please check your input</string>
+    <string name="undo">Undo</string>
+    <string name="book_archived">Book was archived</string>
 </resources>

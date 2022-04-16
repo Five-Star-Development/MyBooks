@@ -11,6 +11,10 @@ interface BookRepository {
 
     suspend fun addBook(title: String, pages: Int) : Boolean
 
+    suspend fun archiveBook(bookId: Int) : Int
+
+    suspend fun activateBook(bookId: Int)
+
     suspend fun addPageEntry(bookId: Int, date: Date, page: Int) : Boolean
 
 }

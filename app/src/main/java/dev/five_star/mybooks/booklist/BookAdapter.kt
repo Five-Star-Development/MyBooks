@@ -41,10 +41,12 @@ class BookAdapter(val itemClick: (position: Int) -> Unit) :
         holder.bindBook(book)
 
         holder.itemView.setOnClickListener {
-
             itemClick(getItem(position).id)
         }
 
     }
 
+    fun getBookId(position: Int) : Int {
+        return getItem(position).id
+    }
 }

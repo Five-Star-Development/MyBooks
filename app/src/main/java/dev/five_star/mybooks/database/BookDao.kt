@@ -12,7 +12,8 @@ interface BookDao {
     @Query(
         "SELECT * " +
                 "FROM book_table " +
-                "LEFT JOIN pages_table ON book_table.id = pages_table.bookId"
+                "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
+                "WHERE book_table.archived = 0"
     )
     fun getAllBooksWithPages(): Flow<BookRepositoryResponse>
 
@@ -20,9 +21,16 @@ interface BookDao {
         "SELECT * " +
                 "FROM book_table " +
                 "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
-                "WHERE book_table.id = :bookId "
+                "WHERE book_table.id = :bookId"
     )
     fun getBookWithPages(bookId: Int): Flow<BookRepositoryResponse>
+
+    @Query(
+        "SELECT * " +
+                "FROM book_table " +
+                "WHERE id = :bookId "
+    )
+    suspend fun getBook(bookId: Int) : BookEntry
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
