@@ -87,9 +87,6 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
             val action = Action.BookAdded
             _effects.postValue(Effect.Navigate(action))
         }
-        Event.RefreshList -> {
-            _effects.postValue(Effect.RefreshList)
-        }
         is Event.SelectItem -> {
             openBookDetails(event.bookId)
         }
@@ -108,7 +105,6 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
 
     sealed class Event {
         object ShowAddBook : Event()
-        object RefreshList: Event()
         data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Event()
         data class ArchiveBook(val bookId: Int) : Event()
         data class ActivateBook(val bookId: Int) : Event()
