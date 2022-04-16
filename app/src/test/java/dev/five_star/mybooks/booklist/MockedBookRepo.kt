@@ -41,6 +41,8 @@ class MockedBookRepo : BookRepository {
         }
     }
 
+    override suspend fun getBookSync(id: Int): Book = bookList[id]
+
     override suspend fun addBook(title: String, pages: Int): Boolean {
         return bookList.add(Book(8, title, pages))
     }

@@ -1,5 +1,6 @@
 package dev.five_star.mybooks.booklist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,6 +44,7 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -61,13 +63,22 @@ class MainFragment : Fragment() {
 
         viewModel.effect.observe(viewLifecycleOwner) { effect ->
             when(effect) {
+                MainViewModel.Effect.RefreshList -> {
+                    bookAdapter.notifyDataSetChanged()
+                }
                 is MainViewModel.Effect.UndoMessage -> {
                     Snackbar
-                        .make(binding.bookList, getString(R.string.book_archived), Snackbar.LENGTH_LONG)
+                        .make(binding.bookList, String.format(resources.getString(R.string.book_archived, effect.title)), Snackbar.LENGTH_LONG)
                         .setAction(getString(R.string.undo)) {
                             viewModel.dataInput(Event.ActivateBook(effect.bookId))
                         }
                         .show()
+                }
+                is MainViewModel.Effect.ShowArchiveDialog -> {
+                    ArchiveDialog(effect.title, effect.archive, effect.cancel).show(
+                        parentFragmentManager,
+                        "archiveDialog"
+                    )
                 }
                 is MainViewModel.Effect.Navigate -> {
                     val action = when (effect.action) {
@@ -101,13 +112,13 @@ class MainFragment : Fragment() {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder) = false
+                target: RecyclerView.ViewHolder
+            ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val bookId = bookAdapter.getBookId(viewHolder.adapterPosition)
                 viewModel.dataInput(Event.ArchiveBook(bookId))
             }
-
         }).attachToRecyclerView(binding.bookList)
     }
 }
