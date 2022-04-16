@@ -11,5 +11,6 @@
     <string name="today">Heute</string>
     <string name="invalid_page_entery">Die Anzahl der Seiten ist unzulässig, bitte prüfe die Eingeben</string>
     <string name="undo">Rückgängig</string>
-    <string name="book_archived">Buch wurde archiviert</string>
+    <string name="book_archived">%1$s wurde archiviert</string>
+    <string name="dialog_archive">Möchtest du %1$s archivieren?</string>
 </resources>

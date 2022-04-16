@@ -9,6 +9,8 @@ interface BookRepository {
 
     fun getBook(id: Int): Flow<Book>
 
+    suspend fun getBookSync(id: Int): Book
+
     suspend fun addBook(title: String, pages: Int) : Boolean
 
     suspend fun archiveBook(bookId: Int) : Int

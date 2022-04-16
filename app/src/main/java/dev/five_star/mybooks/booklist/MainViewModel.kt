@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import dev.five_star.mybooks.data.Book
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
@@ -55,8 +56,9 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
     private fun archiveBook(bookId: Int) {
         viewModelScope.launch(dispatcher) {
             val archiveBookId = repository.archiveBook(bookId)
+            val title = repository.getBookSync(bookId).title
             if (archiveBookId > 0) {
-                _effects.postValue(Effect.UndoMessage(archiveBookId))
+                _effects.postValue(Effect.UndoMessage(archiveBookId, title))
             }
         }
     }
@@ -67,10 +69,26 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
         }
     }
 
+    private fun archiveDialog(bookId: Int) {
+        viewModelScope.launch(dispatcher) {
+            val book: Book = repository.getBookSync(bookId)
+            _effects.postValue(Effect.ShowArchiveDialog(book.title,
+                archive = {
+                    archiveBook(bookId)
+                }, cancel = {
+                    _effects.postValue(Effect.RefreshList)
+                })
+            )
+        }
+    }
+
     fun dataInput(event: Event) = when(event) {
         Event.ShowAddBook -> {
             val action = Action.BookAdded
             _effects.postValue(Effect.Navigate(action))
+        }
+        Event.RefreshList -> {
+            _effects.postValue(Effect.RefreshList)
         }
         is Event.SelectItem -> {
             openBookDetails(event.bookId)
@@ -81,7 +99,7 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
             addBook(bookTitle, bookPages)
         }
         is Event.ArchiveBook -> {
-            archiveBook(event.bookId)
+            archiveDialog(event.bookId)
         }
         is Event.ActivateBook -> {
             activateBook(event.bookId)
@@ -90,6 +108,7 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
 
     sealed class Event {
         object ShowAddBook : Event()
+        object RefreshList: Event()
         data class AddBook(val bookTitleInput: String, val bookPagesInput: String) : Event()
         data class ArchiveBook(val bookId: Int) : Event()
         data class ActivateBook(val bookId: Int) : Event()
@@ -97,7 +116,9 @@ class MainViewModel(private var repository: BookRepository, private val dispatch
     }
 
     sealed class Effect {
-        data class UndoMessage(val bookId: Int) : Effect()
+        object RefreshList : Effect()
+        data class UndoMessage(val bookId: Int, val title: String) : Effect()
+        data class ShowArchiveDialog(val title: String, var archive: () -> Unit, var cancel: () -> Unit) : Effect()
         data class Navigate(val action: Action) : Effect()
     }
 
