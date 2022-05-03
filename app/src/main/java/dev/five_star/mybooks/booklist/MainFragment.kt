@@ -13,14 +13,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.booklist.MainViewModel.Event
 import dev.five_star.mybooks.databinding.FragmentMainBinding
 import dev.five_star.mybooks.requireMyBookApplication
+import dev.five_star.mybooks.utils.ArchiveEvent
+import dev.five_star.mybooks.utils.EventBus
+import javax.inject.Inject
 
 private const val TAG = "MainFragment"
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
+
+    @Inject lateinit var archiveBus: EventBus<ArchiveEvent>
 
     private var _binding: FragmentMainBinding? = null
     // This property is only valid between onCreateView and
@@ -28,7 +35,7 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) {
-        MainViewModelFactory(requireMyBookApplication().bookRepository)
+        MainViewModelFactory(requireMyBookApplication().bookRepository, archiveBus)
     }
 
     private val bookAdapter = BookAdapter { bookId ->
@@ -74,12 +81,6 @@ class MainFragment : Fragment() {
                         }
                         .show()
                 }
-                is MainViewModel.Effect.ShowArchiveDialog -> {
-                    ArchiveDialog(effect.title, effect.archive, effect.cancel).show(
-                        parentFragmentManager,
-                        "archiveDialog"
-                    )
-                }
                 is MainViewModel.Effect.Navigate -> {
                     val action = when (effect.action) {
                         is MainViewModel.Action.ShowDetails -> {
@@ -89,7 +90,10 @@ class MainFragment : Fragment() {
                         MainViewModel.Action.BookAdded -> {
                             MainFragmentDirections.actionMainFragmentToAddBookDialog()
                         }
-                    }
+                        is MainViewModel.Action.ShowArchive -> {
+                            val book = effect.action.book
+                            MainFragmentDirections.actionMainFragmentToArchiveDialog(book)
+                        }                        }
                     findNavController().navigate(action)
                 }
             }
