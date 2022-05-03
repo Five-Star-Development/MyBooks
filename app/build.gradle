@@ -83,6 +83,8 @@ dependencies {
     implementation Google.dagger.hilt.android
     kapt Google.dagger.hilt.android.compiler
 
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+
     testImplementation Testing.junit4
 
     // Coroutines Text

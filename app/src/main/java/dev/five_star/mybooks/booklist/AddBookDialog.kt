@@ -7,22 +7,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.navGraphViewModels
-import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
-import dev.five_star.mybooks.requireMyBookApplication
+import javax.inject.Inject
 
 private const val TAG = "AddBookDialog"
+
+@AndroidEntryPoint
 class AddBookDialog : DialogFragment() {
+
+    @Inject
+    lateinit var viewModelAssistedFactory: MainViewModel.Factory
 
     private var _binding: DialogNewBookBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val viewModel : MainViewModel by navGraphViewModels(R.id.nav_graph) {
-        MainViewModelFactory(requireMyBookApplication().bookRepository)
+    private val viewModel : MainViewModel by viewModels {
+        MainViewModel.provideFactory(viewModelAssistedFactory)
     }
 
     override fun onCreateView(

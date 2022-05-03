@@ -1,9 +1,9 @@
 package dev.five_star.mybooks.booklist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dev.five_star.mybooks.data.Book
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
@@ -18,11 +18,26 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class MainViewModel @AssistedInject constructor(
     private var repository: BookRepository,
-    private val eventBus: EventBus<ArchiveEvent>? = null,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    eventBus: EventBus<ArchiveEvent>,
+    @Assisted private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(dispatcher: CoroutineDispatcher) : MainViewModel
+    }
+
+    companion object {
+        @Suppress("UNCHECKED_CAST")
+        fun provideFactory(assistedFactory: Factory, dispatcher: CoroutineDispatcher = Dispatchers.IO): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return assistedFactory.create(dispatcher) as T
+                }
+            }
+    }
 
     val bookList: LiveData<List<BookItem>> = repository.getAllBooks().mapLatest { it ->
         it.map { it.toItem() }
@@ -35,14 +50,14 @@ class MainViewModel(
     val dialogEffect: LiveData<DialogEffect> = _dialogEffect
 
     init {
-        eventBus?.events?.onEach {
+        eventBus.events.onEach {
             when(it) {
                 is ArchiveEvent.ArchiveBook -> {
                     archiveBook(it.bookId)
                 }
                 ArchiveEvent.CancelArchive -> _effects.postValue(Effect.RefreshList)
             }
-        }?.launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
 
     private fun openBookDetails(bookId: Int) {

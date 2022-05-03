@@ -13,10 +13,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import dev.five_star.mybooks.databinding.FragmentBookDetailBinding
-import dev.five_star.mybooks.requireMyBookApplication
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
+
+    @Inject lateinit var viewModelAssistedFactory : DetailsViewModel.Factory
 
     private var _binding: FragmentBookDetailBinding? = null
 
@@ -28,7 +32,7 @@ class DetailsFragment : Fragment() {
     private val args: DetailsFragmentArgs by navArgs()
 
     private val viewModel: DetailsViewModel by viewModels {
-        DetailsViewModelFactory(args.bookId, requireMyBookApplication().bookRepository)
+        DetailsViewModel.provideFactory(viewModelAssistedFactory, args.bookId)
     }
 
     override fun onCreateView(

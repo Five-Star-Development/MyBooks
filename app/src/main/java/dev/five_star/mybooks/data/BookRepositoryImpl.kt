@@ -5,8 +5,11 @@ import dev.five_star.mybooks.database.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: PagesDao) :
+@Singleton
+class BookRepositoryImpl @Inject constructor(private val bookDao: BookDao, private val pagesDao: PagesDao) :
     BookRepository {
 
     override fun getAllBooks(): Flow<List<Book>> {

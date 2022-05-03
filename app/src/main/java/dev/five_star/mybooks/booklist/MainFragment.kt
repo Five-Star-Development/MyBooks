@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.booklist.MainViewModel.Event
 import dev.five_star.mybooks.databinding.FragmentMainBinding
-import dev.five_star.mybooks.requireMyBookApplication
-import dev.five_star.mybooks.utils.ArchiveEvent
-import dev.five_star.mybooks.utils.EventBus
 import javax.inject.Inject
 
 private const val TAG = "MainFragment"
@@ -27,15 +24,15 @@ private const val TAG = "MainFragment"
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    @Inject lateinit var archiveBus: EventBus<ArchiveEvent>
+    @Inject lateinit var viewModelAssistedFactory: MainViewModel.Factory
 
     private var _binding: FragmentMainBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) {
-        MainViewModelFactory(requireMyBookApplication().bookRepository, archiveBus)
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModel.provideFactory(viewModelAssistedFactory)
     }
 
     private val bookAdapter = BookAdapter { bookId ->

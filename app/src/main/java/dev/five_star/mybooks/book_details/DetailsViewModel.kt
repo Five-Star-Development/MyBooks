@@ -1,6 +1,9 @@
 package dev.five_star.mybooks.book_details
 
 import androidx.lifecycle.*
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
@@ -12,8 +15,25 @@ import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-class DetailsViewModel(private val bookId: Int, private val repository: BookRepository) :
-    ViewModel() {
+class DetailsViewModel @AssistedInject constructor(
+    @Assisted private val bookId: Int,
+    private val repository: BookRepository
+) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(bookId: Int): DetailsViewModel
+    }
+
+    companion object {
+        @Suppress("UNCHECKED_CAST")
+        fun provideFactory(assistedFactory: Factory, bookId: Int): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return assistedFactory.create(bookId) as T
+                }
+            }
+    }
 
     val bookData: LiveData<BookItem> = repository.getBook(bookId).mapLatest { book ->
         book.toItem()
