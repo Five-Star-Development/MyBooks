@@ -18,6 +18,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_archiveDialog"
+            app:destination="@id/archiveDialog" />
     </fragment>
     <dialog
         android:id="@+id/addBookDialog"
@@ -38,4 +41,12 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <dialog
+        android:id="@+id/archiveDialog"
+        android:name="dev.five_star.mybooks.booklist.ArchiveDialog"
+        android:label="ArchiveDialog" >
+        <argument
+            android:name="book"
+            app:argType="dev.five_star.mybooks.data.Book" />
+    </dialog>
 </navigation>
