@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "24595444908",
+    "project_id": "my-books-c1522",
+    "storage_bucket": "my-books-c1522.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24595444908:android:cb5182d022b126e1629b09",
+        "android_client_info": {
+          "package_name": "dev.five_star.mybooks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24595444908-8sjfju5ctsif19rqqm2imhk1836fr3au.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHuK8Gu_y_okVz3BWHzcjBdDOzOO0qAKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24595444908-8sjfju5ctsif19rqqm2imhk1836fr3au.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,8 +4,9 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    //firebase
+    id 'com.google.gms.google-services'
 }
-apply plugin: 'kotlin-android'
 
 android {
     compileSdk 31
@@ -76,6 +77,14 @@ dependencies {
     // Kotlin components
     api KotlinX.coroutines.core
     api KotlinX.coroutines.android
+
+    // Import the Firebase BoM
+    implementation platform(Firebase.bom)
+
+    // Add the dependency for the Firebase SDK for Google Analytics
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
 
     testImplementation Testing.junit4
 
