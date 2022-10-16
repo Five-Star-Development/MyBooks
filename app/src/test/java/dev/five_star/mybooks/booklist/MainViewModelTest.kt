@@ -31,7 +31,8 @@ class MainViewModelTest {
     @Before
     fun testSetup() {
         testBookRepo = MockedBookRepo()
-        testMainViewModel = MainViewModel(testBookRepo, mainCoroutineRule.dispatcher)
+        //TODO: we need EventBus here?
+        testMainViewModel = MainViewModel(testBookRepo, dispatcher = mainCoroutineRule.dispatcher)
     }
 
     @Test
