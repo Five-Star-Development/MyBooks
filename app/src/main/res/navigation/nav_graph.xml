@@ -22,6 +22,11 @@
             android:id="@+id/action_mainFragment_to_archiveDialog"
             app:destination="@id/archiveDialog" />
     </fragment>
+    <fragment
+        android:id="@+id/archivedFragment"
+        android:name="dev.five_star.mybooks.archived_booklist.ArchivedFragment"
+        android:label="ArchivedBooksFragment">
+    </fragment>
     <dialog
         android:id="@+id/addBookDialog"
         android:name="dev.five_star.mybooks.booklist.AddBookDialog"

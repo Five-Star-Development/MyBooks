@@ -5,7 +5,9 @@ import java.util.*
 
 interface BookRepository {
 
-    fun getAllBooks(): Flow<List<Book>>
+    fun getAllActiveBooks(): Flow<List<Book>>
+
+    fun getAllArchivedBooks(): Flow<List<Book>>
 
     fun getBook(id: Int): Flow<Book>
 

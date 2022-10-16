@@ -9,9 +9,17 @@ import java.util.*
 class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: PagesDao) :
     BookRepository {
 
-    override fun getAllBooks(): Flow<List<Book>> {
+    override fun getAllActiveBooks(): Flow<List<Book>> {
 
-        val bookMap = bookDao.getAllBooksWithPages()
+        val bookMap = bookDao.getAllActiveBooksWithPages()
+        return bookMap.map { bookEntryMap ->
+            Log.d("BookRepository", bookEntryMap.toString())
+            bookEntryMap.toBook()
+        }
+    }
+
+    override fun getAllArchivedBooks(): Flow<List<Book>> {
+        val bookMap = bookDao.getArchivedBooksWithPages()
         return bookMap.map { bookEntryMap ->
             Log.d("BookRepository", bookEntryMap.toString())
             bookEntryMap.toBook()
