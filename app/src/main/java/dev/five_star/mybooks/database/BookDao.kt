@@ -28,6 +28,14 @@ interface BookDao {
     @Query(
         "SELECT * " +
                 "FROM book_table " +
+                "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
+                "WHERE book_table.id = :bookId"
+    )
+    fun getBookWithPagesSync(bookId: Int): BookRepositoryResponse
+
+    @Query(
+        "SELECT * " +
+                "FROM book_table " +
                 "WHERE id = :bookId "
     )
     suspend fun getBook(bookId: Int) : BookEntry

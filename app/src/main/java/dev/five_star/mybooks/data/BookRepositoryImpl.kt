@@ -25,6 +25,11 @@ class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: Pag
         return book
     }
 
+    override suspend fun getBookSync(id: Int): Book {
+        val book = bookDao.getBookWithPagesSync(id).toBook()
+        return book[0]
+    }
+
     override suspend fun archiveBook(bookId: Int): Int {
         val book = bookDao.getBook(bookId).copy(archived = true)
         val result = bookDao.updateBook(book)
