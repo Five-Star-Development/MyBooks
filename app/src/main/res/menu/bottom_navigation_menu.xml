@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/mainFragment"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/books"/>
+    <item
+        android:id="@id/archivedFragment"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/archive"/>
+</menu>

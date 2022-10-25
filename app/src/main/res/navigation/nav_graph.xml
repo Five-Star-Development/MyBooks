@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_mainFragment_to_archiveDialog"
             app:destination="@id/archiveDialog" />
+        <action
+            android:id="@+id/action_mainFragment_to_archivedFragment"
+            app:destination="@id/archivedFragment" />
     </fragment>
     <fragment
         android:id="@+id/archivedFragment"
