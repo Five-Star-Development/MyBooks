@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
+    id 'org.jetbrains.kotlin.android'
 }
 apply plugin: 'kotlin-android'
 
@@ -51,6 +53,16 @@ android {
 //    }
 }
 
+ktlint {
+    android = true
+    ignoreFailures = false
+    reporters {
+        reporter "plain"
+        reporter "checkstyle"
+        reporter "sarif"
+    }
+}
+
 dependencies {
     // https://github.com/jmfayard/refreshVersions/tree/main/plugins/dependencies/src/main/kotlin/dependencies
 
@@ -66,6 +78,7 @@ dependencies {
 
     // Room components
     implementation AndroidX.room.ktx
+    implementation 'androidx.core:core-ktx:+'
     kapt AndroidX.room.compiler
     androidTestImplementation AndroidX.room.testing
 

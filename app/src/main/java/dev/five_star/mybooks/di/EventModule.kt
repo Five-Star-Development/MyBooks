@@ -15,5 +15,5 @@ abstract class EventModule {
 
     @Singleton
     @Binds
-    abstract fun bindEvent(event: EventBusImpl<ArchiveEvent>) : EventBus<ArchiveEvent>
+    abstract fun bindEvent(event: EventBusImpl<ArchiveEvent>): EventBus<ArchiveEvent>
 }

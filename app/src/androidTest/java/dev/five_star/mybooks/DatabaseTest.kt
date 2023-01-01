@@ -5,7 +5,10 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.five_star.mybooks.data.toBook
-import dev.five_star.mybooks.database.*
+import dev.five_star.mybooks.database.BookDao
+import dev.five_star.mybooks.database.BookEntry
+import dev.five_star.mybooks.database.BookRoomDatabase
+import dev.five_star.mybooks.database.PagesDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -88,7 +91,3 @@ class DatabaseTest {
         assert(bookList[0].bookmarks.isEmpty())
     }
 }
-
-
-
-

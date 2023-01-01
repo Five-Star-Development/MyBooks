@@ -16,7 +16,5 @@ interface PagesDao {
     suspend fun getLastPageForBook(bookId: Int): Int?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPages(pageEntry: PageEntry) : Long
-
-
+    suspend fun insertPages(pageEntry: PageEntry): Long
 }

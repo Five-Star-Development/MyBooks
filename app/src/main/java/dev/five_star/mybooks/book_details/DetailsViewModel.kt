@@ -5,12 +5,12 @@ import dev.five_star.mybooks.R
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 
 class DetailsViewModel(private val bookId: Int, private val repository: BookRepository) :
     ViewModel() {
@@ -31,8 +31,8 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
             returns(true) implies (enteredPage != null)
         }
         return if (bookData.value != null && !enteredPage.isNullOrBlank()) {
-            (bookData.value!!.currentPage < enteredPage.toInt())
-                    && (enteredPage.toInt() <= bookData.value!!.totalPages)
+            (bookData.value!!.currentPage < enteredPage.toInt()) &&
+                (enteredPage.toInt() <= bookData.value!!.totalPages)
         } else {
             false
         }
@@ -53,5 +53,4 @@ class DetailsViewModel(private val bookId: Int, private val repository: BookRepo
         }
         return true
     }
-
 }

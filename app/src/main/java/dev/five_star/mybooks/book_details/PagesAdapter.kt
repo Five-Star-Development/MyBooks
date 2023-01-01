@@ -24,7 +24,7 @@ class PagesAdapter : ListAdapter<PageBookmarkItem, PagesAdapter.ViewHolder>(Page
     inner class ViewHolder(private val binding: ItemBookPageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindPagesEntry(entry: PageBookmarkItem) {
-            val dateText = when(entry.date) {
+            val dateText = when (entry.date) {
                 is DateViewItem.Reference -> {
                     itemView.context.getString(entry.date.res)
                 }
@@ -47,5 +47,4 @@ class PagesAdapter : ListAdapter<PageBookmarkItem, PagesAdapter.ViewHolder>(Page
         val pagesEntry: PageBookmarkItem = getItem(position)
         holder.bindPagesEntry(pagesEntry)
     }
-
 }

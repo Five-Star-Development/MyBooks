@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.navGraphViewModels
-import com.google.android.material.snackbar.Snackbar
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.databinding.DialogNewBookBinding
 import dev.five_star.mybooks.requireMyBookApplication
@@ -21,7 +20,7 @@ class AddBookDialog : DialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val viewModel : MainViewModel by navGraphViewModels(R.id.nav_graph) {
+    private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) {
         MainViewModelFactory(requireMyBookApplication().bookRepository)
     }
 
@@ -44,7 +43,7 @@ class AddBookDialog : DialogFragment() {
         }
 
         viewModel.dialogEffect.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 MainViewModel.DialogEffect.CloseAddBook -> dismiss()
                 MainViewModel.DialogEffect.InputError -> showErrorMessage()
             }
@@ -70,5 +69,4 @@ class AddBookDialog : DialogFragment() {
         val errorMessage = Toast.makeText(context, R.string.book_insert_error, Toast.LENGTH_LONG)
         errorMessage.show()
     }
-
 }

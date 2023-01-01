@@ -21,5 +21,4 @@ abstract class BookRoomDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
 
     abstract fun pagesDao(): PagesDao
-
 }
