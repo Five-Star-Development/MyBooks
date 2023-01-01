@@ -25,7 +25,7 @@ class MainViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    lateinit var testBookRepo : BookRepository
+    lateinit var testBookRepo: BookRepository
     lateinit var testMainViewModel: MainViewModel
 
     @Before
@@ -39,7 +39,7 @@ class MainViewModelTest {
         testMainViewModel.dataInput(MainViewModel.Event.ShowAddBook)
         val mostRecentEffect = testMainViewModel.effect.value
         if (mostRecentEffect is MainViewModel.Effect.Navigate) {
-            assertThat(mostRecentEffect.action, `is` (MainViewModel.Action.BookAdded))
+            assertThat(mostRecentEffect.action, `is`(MainViewModel.Action.BookAdded))
         }
     }
 
@@ -49,7 +49,10 @@ class MainViewModelTest {
         val bookPages = "77"
         val addBookEvent = MainViewModel.Event.AddBook(bookTitle, bookPages)
         testMainViewModel.dataInput(addBookEvent)
-        assertThat(testMainViewModel.dialogEffect.value, `is` (MainViewModel.DialogEffect.InputError))
+        assertThat(
+            testMainViewModel.dialogEffect.value,
+            `is`(MainViewModel.DialogEffect.InputError)
+        )
     }
 
     @Test
@@ -58,7 +61,10 @@ class MainViewModelTest {
         val bookPages = "0"
         val addBookEvent = MainViewModel.Event.AddBook(bookTitle, bookPages)
         testMainViewModel.dataInput(addBookEvent)
-        assertThat(testMainViewModel.dialogEffect.value, `is` (MainViewModel.DialogEffect.InputError))
+        assertThat(
+            testMainViewModel.dialogEffect.value,
+            `is`(MainViewModel.DialogEffect.InputError)
+        )
     }
 
     @Test
@@ -86,7 +92,10 @@ class MainViewModelTest {
         val bookPages = "77"
         val addBookEvent = MainViewModel.Event.AddBook(bookTitle, bookPages)
         testMainViewModel.dataInput(addBookEvent)
-        assertThat(testMainViewModel.dialogEffect.value, `is` (MainViewModel.DialogEffect.CloseAddBook))
+        assertThat(
+            testMainViewModel.dialogEffect.value,
+            `is`(MainViewModel.DialogEffect.CloseAddBook)
+        )
     }
 
     @Test
@@ -125,7 +134,5 @@ class MainViewModelTest {
         } else {
             assert(false)
         }
-
     }
-
 }

@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dev.five_star.mybooks.data.BookRepository
 
-class DetailsViewModelFactory(private val bookId: Int, private val repository: BookRepository) : ViewModelProvider.Factory {
+class DetailsViewModelFactory(private val bookId: Int, private val repository: BookRepository) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailsViewModel::class.java)) {
             return DetailsViewModel(bookId = bookId, repository = repository) as T

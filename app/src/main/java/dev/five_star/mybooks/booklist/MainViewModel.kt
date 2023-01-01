@@ -36,7 +36,7 @@ class MainViewModel(
 
     init {
         eventBus?.events?.onEach {
-            when(it) {
+            when (it) {
                 is ArchiveEvent.ArchiveBook -> {
                     archiveBook(it.bookId)
                 }
@@ -61,7 +61,6 @@ class MainViewModel(
                     _dialogEffect.postValue(DialogEffect.InputError)
                 }
             }
-
         } else {
             _dialogEffect.postValue(DialogEffect.InputError)
         }
@@ -136,6 +135,4 @@ class MainViewModel(
         object CloseAddBook : DialogEffect()
         object InputError : DialogEffect()
     }
-
 }
-

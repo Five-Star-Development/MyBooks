@@ -63,15 +63,19 @@ class DetailsFragment : Fragment() {
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorRes ->
             Snackbar.make(binding.root, errorRes, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok) {
-                    val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        requireContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.showSoftInput(binding.pagesEntry, InputMethodManager.SHOW_IMPLICIT)
                 }.show()
         }
 
         binding.pagesEntry.setOnKeyListener { view, keyCode, keyEvent ->
-            if ((keyEvent.action == KeyEvent.ACTION_DOWN
-                        && keyCode == KeyEvent.KEYCODE_ENTER)
-                        && view is TextView) {
+            if ((
+                keyEvent.action == KeyEvent.ACTION_DOWN &&
+                    keyCode == KeyEvent.KEYCODE_ENTER
+                ) && view is TextView
+            ) {
                 viewModel.verifyEnter(view.text?.toString())
                 false
             } else {
@@ -84,5 +88,4 @@ class DetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

@@ -6,7 +6,7 @@ import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.utils.ArchiveEvent
 import dev.five_star.mybooks.utils.EventBus
 
-//TODO MainViewModel in AddBookDialog?
+// TODO MainViewModel in AddBookDialog?
 class MainViewModelFactory(
     private val repository: BookRepository,
     private val events: EventBus<ArchiveEvent>? = null

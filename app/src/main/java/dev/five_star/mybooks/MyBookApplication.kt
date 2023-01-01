@@ -20,9 +20,10 @@ class MyBookApplication : Application() {
         ).build()
     }
 
-    val bookRepository : BookRepository by lazy { BookRepositoryImpl(database.bookDao(), database.pagesDao()) }
+    val bookRepository: BookRepository by lazy {
+        BookRepositoryImpl(database.bookDao(), database.pagesDao())
+    }
 }
-
 
 fun Fragment.requireMyBookApplication() = requireActivity().application as MyBookApplication
 

@@ -15,4 +15,3 @@ data class Book(
 fun BookEntry.toBook(bookmarks: List<PageBookmark>): Book {
     return Book(id, title, pages, bookmarks)
 }
-

@@ -2,9 +2,9 @@ package dev.five_star.mybooks.data
 
 import android.util.Log
 import dev.five_star.mybooks.database.*
+import java.util.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.*
 
 class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: PagesDao) :
     BookRepository {
@@ -52,13 +52,14 @@ class BookRepositoryImpl(private val bookDao: BookDao, private val pagesDao: Pag
         val result = pagesDao.insertPages(pageEntry)
         return result > 0
     }
-
 }
 
-fun BookRepositoryResponse.toBook() : List<Book> {
+fun BookRepositoryResponse.toBook(): List<Book> {
     return map { item ->
-        item.key.toBook(item.value.map { bookmark ->
-            bookmark.toPageBookmark()
-        })
+        item.key.toBook(
+            item.value.map { bookmark ->
+                bookmark.toPageBookmark()
+            }
+        )
     }
 }

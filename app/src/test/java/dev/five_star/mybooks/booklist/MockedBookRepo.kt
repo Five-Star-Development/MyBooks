@@ -3,22 +3,22 @@ package dev.five_star.mybooks.booklist
 import dev.five_star.mybooks.data.Book
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.database.PageEntry
+import java.util.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.util.*
 
 class MockedBookRepo : BookRepository {
 
     private var archiveBook: Book? = null
 
     private val bookList = mutableListOf(
-        Book(1,"Book Number 1", 300),
+        Book(1, "Book Number 1", 300),
         Book(2, "Book Number 2", 300, emptyList()),
-        Book(3,"Book Number 3", 300, emptyList()),
-        Book(4,"Book Number 4", 300, emptyList()),
-        Book(5,"Book Number 5", 300, emptyList()),
-        Book(6,"Book Number 6", 300, emptyList()),
-        Book(7,"Book Number 7", 300, emptyList()),
+        Book(3, "Book Number 3", 300, emptyList()),
+        Book(4, "Book Number 4", 300, emptyList()),
+        Book(5, "Book Number 5", 300, emptyList()),
+        Book(6, "Book Number 6", 300, emptyList()),
+        Book(7, "Book Number 7", 300, emptyList()),
     )
 
     private val pageList = mutableListOf(
@@ -62,5 +62,4 @@ class MockedBookRepo : BookRepository {
     override suspend fun addPageEntry(bookId: Int, date: Date, page: Int): Boolean {
         return pageList.add(PageEntry(bookId = bookId, date = date, page = page))
     }
-
 }

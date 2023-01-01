@@ -19,7 +19,7 @@ class ArchiveViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(book: Book) : ArchiveViewModel
+        fun create(book: Book): ArchiveViewModel
     }
 
     companion object {
