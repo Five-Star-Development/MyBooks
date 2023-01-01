@@ -29,10 +29,14 @@ class MockedBookRepo : BookRepository {
         PageEntry(bookId = 1, date = Date(), page = 111),
     )
 
-    override fun getAllBooks(): Flow<List<Book>> {
+    override fun getAllActiveBooks(): Flow<List<Book>> {
         return flow {
             emit(bookList)
         }
+    }
+
+    override fun getAllArchivedBooks(): Flow<List<Book>> {
+        TODO("Not yet implemented")
     }
 
     override fun getBook(id: Int): Flow<Book> {

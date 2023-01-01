@@ -24,7 +24,7 @@ class MainViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    val bookList: LiveData<List<BookItem>> = repository.getAllBooks().mapLatest { it ->
+    val bookList: LiveData<List<BookItem>> = repository.getAllActiveBooks().mapLatest { it ->
         it.map { it.toItem() }
     }.asLiveData()
 

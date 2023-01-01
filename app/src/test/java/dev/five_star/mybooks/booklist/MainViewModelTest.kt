@@ -31,7 +31,8 @@ class MainViewModelTest {
     @Before
     fun testSetup() {
         testBookRepo = MockedBookRepo()
-        testMainViewModel = MainViewModel(testBookRepo, mainCoroutineRule.dispatcher)
+        //TODO: we need EventBus here?
+        testMainViewModel = MainViewModel(testBookRepo, dispatcher = mainCoroutineRule.dispatcher)
     }
 
     @Test
@@ -100,26 +101,26 @@ class MainViewModelTest {
 
     @Test
     fun `archive book`() = runTest {
-        val books = testBookRepo.getAllBooks().first()
+        val books = testBookRepo.getAllActiveBooks().first()
         val book = books[0]
         val archiveEvent = MainViewModel.Event.ArchiveBook(book.id)
         testMainViewModel.dataInput(archiveEvent)
-        val newBooks = testBookRepo.getAllBooks().first()
+        val newBooks = testBookRepo.getAllActiveBooks().first()
         assert(!newBooks.contains(book))
     }
 
     @Test
     fun `activate archived book`() = runTest {
-        val books = testBookRepo.getAllBooks().first()
+        val books = testBookRepo.getAllActiveBooks().first()
         val book = books[0]
         val archiveEvent = MainViewModel.Event.ArchiveBook(book.id)
         testMainViewModel.dataInput(archiveEvent)
-        val booksWithArchived = testBookRepo.getAllBooks().first()
+        val booksWithArchived = testBookRepo.getAllActiveBooks().first()
         assert(!booksWithArchived.contains(book))
 
         val activateEvent = MainViewModel.Event.ActivateBook(book.id)
         testMainViewModel.dataInput(activateEvent)
-        val booksWithActivated = testBookRepo.getAllBooks().first()
+        val booksWithActivated = testBookRepo.getAllActiveBooks().first()
         assert(booksWithActivated.contains(book))
     }
 

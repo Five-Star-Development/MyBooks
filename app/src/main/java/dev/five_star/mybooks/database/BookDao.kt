@@ -15,7 +15,15 @@ interface BookDao {
             "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
             "WHERE book_table.archived = 0"
     )
-    fun getAllBooksWithPages(): Flow<BookRepositoryResponse>
+    fun getAllActiveBooksWithPages(): Flow<BookRepositoryResponse>
+
+    @Query(
+        "SELECT * " +
+                "FROM book_table " +
+                "LEFT JOIN pages_table ON book_table.id = pages_table.bookId " +
+                "WHERE book_table.archived = 1"
+    )
+    fun getArchivedBooksWithPages(): Flow<BookRepositoryResponse>
 
     @Query(
         "SELECT * " +

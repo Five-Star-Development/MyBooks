@@ -13,4 +13,6 @@
     <string name="undo">Undo</string>
     <string name="book_archived">%1$s was archived</string>
     <string name="dialog_archive">Do you want to archive %1$s?</string>
+    <string name="books">Books</string>
+    <string name="archive">Archive</string>
 </resources>

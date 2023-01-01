@@ -83,7 +83,7 @@ class DatabaseTest {
     @Test(expected = ClassCastException::class)
     fun getAllBookTest() = runBlocking {
         insertBookTest()
-        val bookMap: BookRepositoryResponse = bookDao.getAllBooksWithPages().first()
+        val bookMap: BookRepositoryResponse = bookDao.getAllActiveBooksWithPages().first()
         val bookList = bookMap.toBook()
         assert(bookList.isNotEmpty())
         assert(bookList[0].title == TITLE)
