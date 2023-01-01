@@ -44,7 +44,7 @@ interface BookDao {
     @Query(
         "SELECT * " +
             "FROM book_table " +
-            "WHERE id = :bookId "
+            "WHERE id = :bookId"
     )
     suspend fun getBook(bookId: Int): BookEntry
 
@@ -58,4 +58,4 @@ interface BookDao {
     suspend fun deleteBook(book: BookEntry): Int
 }
 
-public typealias BookRepositoryResponse = Map<BookEntry, List<PageEntry>>
+typealias BookRepositoryResponse = Map<BookEntry, List<PageEntry>>
