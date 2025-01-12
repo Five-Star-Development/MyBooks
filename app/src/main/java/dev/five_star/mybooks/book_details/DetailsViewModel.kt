@@ -1,16 +1,20 @@
 package dev.five_star.mybooks.book_details
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dev.five_star.mybooks.R
 import dev.five_star.mybooks.data.BookRepository
 import dev.five_star.mybooks.ui_common.BookItem
 import dev.five_star.mybooks.ui_common.toItem
-import java.util.*
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
+import java.util.Date
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 class DetailsViewModel(private val bookId: Int, private val repository: BookRepository) :
     ViewModel() {
