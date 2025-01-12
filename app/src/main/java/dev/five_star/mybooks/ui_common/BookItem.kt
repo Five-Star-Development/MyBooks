@@ -10,17 +10,14 @@ data class BookItem(
     val totalPages: Int,
     val currentPage: Int,
     val percentText: String,
-    val bookProcess: Int,
-    val bookmarkList: List<PageBookmarkItem>
+    val bookProcess: Int = 0,
+    val bookmarkList: List<PageBookmarkItem> = emptyList()
 )
 
 fun Book.toItem(): BookItem {
-    val lastPage = if (bookmarks.isNotEmpty()) {
-        bookmarks.last().page
-    } else 0
+    val lastPage = if (bookmarks.isNotEmpty()) { bookmarks.last().page } else 0
+    val filteredBookmarks = if (bookmarks.isNotEmpty()) {bookmarks.sortedByDescending { it.date } } else emptyList()
     val percent = lastPage.divideToPercent(pages)
-
-    val filteredBookmarks = bookmarks.reversed()
 //        .filterIndexed { index, pageBookmark ->
 //        if (index > 0) {
 //            val previousDate = bookmarks[index - 1].date
