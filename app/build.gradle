@@ -11,12 +11,13 @@ plugins {
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 33
+    namespace 'dev.five_star.mybooks'
+    compileSdk 35
 
     defaultConfig {
         applicationId "dev.five_star.mybooks"
         minSdk 23
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -39,12 +40,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(18)
+        }
     }
 
 //    packagingOptions {
@@ -78,7 +77,7 @@ dependencies {
 
     // Room components
     implementation AndroidX.room.ktx
-    implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.core:core-ktx:1.15.0'
     kapt AndroidX.room.compiler
     androidTestImplementation AndroidX.room.testing
 
