@@ -13,4 +13,6 @@
     <string name="undo">Rückgängig</string>
     <string name="book_archived">%1$s wurde archiviert</string>
     <string name="dialog_archive">Möchtest du %1$s archivieren?</string>
+    <string name="books">Bücher</string>
+    <string name="archive">Archiv</string>
 </resources>
